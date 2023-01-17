@@ -72,7 +72,8 @@ int main(int argc, char * argv[]){
 
         size_t len = pinyin_parse_more_full_pinyins(instance, linebuf);
         pinyin_guess_sentence_with_prefix(instance, prefixbuf);
-        guint sort_option = SORT_BY_PHRASE_LENGTH | SORT_BY_FREQUENCY;
+        // guint sort_option = SORT_BY_PHRASE_LENGTH | SORT_BY_FREQUENCY;
+        guint sort_option = SORT_BY_FREQUENCY;
 
         size_t start = 0;
         std::string generated_sentence;

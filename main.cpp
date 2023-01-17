@@ -44,6 +44,8 @@ int main(int argc, char * argv[]){
     char * linebuf = NULL; size_t linesize = 0;
     ssize_t read;
 
+    getline(&prefixbuf, &prefixsize, stdin);
+
     while( TRUE ){
         fprintf(stdout, "prefix:");
         fflush(stdout);
@@ -125,7 +127,7 @@ int main(int argc, char * argv[]){
             start = pinyin_choose_candidate(instance, start, candidate);
         }
 
-        pinyin_train(instance, 0);
+        // pinyin_train(instance, 0);
         pinyin_reset(instance);
         pinyin_save(context);
     }

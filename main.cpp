@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <string>
 
 int main(int argc, char * argv[]){
     pinyin_context_t * context =
@@ -70,28 +71,59 @@ int main(int argc, char * argv[]){
         size_t len = pinyin_parse_more_full_pinyins(instance, linebuf);
         pinyin_guess_sentence_with_prefix(instance, prefixbuf);
         guint sort_option = SORT_BY_PHRASE_LENGTH | SORT_BY_FREQUENCY;
-        pinyin_guess_candidates(instance, 0, sort_option);
 
-        size_t i = 0;
-        for (i = 0; i <= len; ++i) {
-            gchar * aux_text = NULL;
-            pinyin_get_full_pinyin_auxiliary_text(instance, i, &aux_text);
-            printf("auxiliary text:%s\n", aux_text);
-            g_free(aux_text);
-        }
+        size_t start = 0;
+        std::string generated_sentence;
 
-        guint num = 0;
-        pinyin_get_n_candidate(instance, &num);
-        for (i = 0; i < num; ++i) {
+        while(start < strlen(linebuf)){
+            pinyin_guess_candidates(instance, start, sort_option);
+
+            size_t i = 0;
+            // for (i = 0; i <= len; ++i) {
+            //     gchar * aux_text = NULL;
+            //     pinyin_get_full_pinyin_auxiliary_text(instance, i, &aux_text);
+            //     printf("auxiliary text:%s\n", aux_text);
+            //     g_free(aux_text);
+            // }
+
+            guint num = 0;
+            pinyin_get_n_candidate(instance, &num);
+            for (i = 0; i < num; ++i) {
+                lookup_candidate_t * candidate = NULL;
+                pinyin_get_candidate(instance, i, &candidate);
+
+                const char * word = NULL;
+                pinyin_get_candidate_string(instance, candidate, &word);
+
+                printf("%zu:%s\t", i, word);
+            }
+            printf("\n");
+
+            fprintf(stdout, "choose:");
+            fflush(stdout);
+
+            if ((read = getline(&prefixbuf, &prefixsize, stdin)) == -1)
+                break;
+
+            if ( '\n' == prefixbuf[strlen(prefixbuf) - 1] ) {
+                prefixbuf[strlen(prefixbuf) - 1] = '\0';
+            }
+
+
+            int chosen = atoi(prefixbuf);
+
             lookup_candidate_t * candidate = NULL;
-            pinyin_get_candidate(instance, i, &candidate);
+            pinyin_get_candidate(instance, chosen, &candidate);
 
             const char * word = NULL;
             pinyin_get_candidate_string(instance, candidate, &word);
+            generated_sentence += word;
 
-            printf("%s\t", word);
+            fprintf(stdout, "sentence:%s\n", generated_sentence.c_str());
+            fflush(stdout);
+
+            start = pinyin_choose_candidate(instance, start, candidate);
         }
-        printf("\n");
 
         pinyin_train(instance, 0);
         pinyin_reset(instance);

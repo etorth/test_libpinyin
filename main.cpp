@@ -30,7 +30,7 @@
 
 int main(int argc, char * argv[]){
     pinyin_context_t * context =
-        pinyin_init("/home/anhong/b_mir2x_debug/3rdparty/libpinyin/data", ".");
+        pinyin_init("/home/anhong/b_libpinyin/data", "/home/anhong/b_libpinyin/data");
 
     pinyin_option_t options = PINYIN_INCOMPLETE |
         PINYIN_CORRECT_ALL | USE_DIVIDED_TABLE | USE_RESPLIT_TABLE |

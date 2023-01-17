@@ -29,6 +29,8 @@
 #include <string.h>
 #include <string>
 
+// check ibus-libpinyin
+
 int main(int argc, char * argv[]){
     pinyin_context_t * context =
         pinyin_init("/home/anhong/b_libpinyin/data", "/home/anhong/b_libpinyin/data");

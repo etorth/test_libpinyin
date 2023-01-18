@@ -123,7 +123,16 @@ int main(int argc, char * argv[]){
 
             const char * word = NULL;
             pinyin_get_candidate_string(instance, candidate, &word);
-            generated_sentence += word;
+
+            lookup_candidate_type_t type;
+            pinyin_get_candidate_type(instance, candidate, &type);
+
+            if(type == NBEST_MATCH_CANDIDATE){
+                generated_sentence = word;
+            }
+            else{
+                generated_sentence += word;
+            }
 
             fprintf(stdout, "sentence:%s\n", generated_sentence.c_str());
             fflush(stdout);

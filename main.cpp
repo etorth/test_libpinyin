@@ -32,12 +32,9 @@
 // check ibus-libpinyin
 
 int main(int argc, char * argv[]){
-    pinyin_context_t * context =
-        pinyin_init("/home/anhong/b_libpinyin/data", "/home/anhong/b_libpinyin/data");
+    pinyin_context_t * context = pinyin_init("data", "data");
 
-    pinyin_option_t options = PINYIN_INCOMPLETE |
-        PINYIN_CORRECT_ALL | USE_DIVIDED_TABLE | USE_RESPLIT_TABLE |
-        DYNAMIC_ADJUST;
+    pinyin_option_t options = PINYIN_INCOMPLETE | PINYIN_CORRECT_ALL | USE_DIVIDED_TABLE | USE_RESPLIT_TABLE | DYNAMIC_ADJUST;
     pinyin_set_options(context, options);
 
     pinyin_instance_t * instance = pinyin_alloc_instance(context);

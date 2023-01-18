@@ -75,7 +75,8 @@ int main(int argc, char * argv[]){
         size_t len = pinyin_parse_more_full_pinyins(instance, linebuf);
         pinyin_guess_sentence_with_prefix(instance, prefixbuf);
         // guint sort_option = SORT_BY_PHRASE_LENGTH | SORT_BY_FREQUENCY;
-        guint sort_option = SORT_BY_FREQUENCY;
+        // guint sort_option = SORT_BY_FREQUENCY;
+        auto sort_option = SORT_BY_PHRASE_LENGTH_AND_PINYIN_LENGTH_AND_FREQUENCY;
 
         size_t start = 0;
         std::string generated_sentence;
@@ -100,7 +101,10 @@ int main(int argc, char * argv[]){
                 const char * word = NULL;
                 pinyin_get_candidate_string(instance, candidate, &word);
 
-                printf("%zu:%s\t", i, word);
+                lookup_candidate_type_t type;
+                pinyin_get_candidate_type(instance, candidate, &type);
+
+                printf("%zu:%s(%d)\t", i, word, (int)(type));
             }
             printf("\n");
 

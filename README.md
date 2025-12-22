@@ -1,13 +1,21 @@
 # test_libpinyin
 
-A Chinese pinyin input method test program using libpinyin.
+A Chinese pinyin input method test program using libpinyin, following ibus-libpinyin's design patterns.
 
 ## Features
 
-- **User preference learning**: Remembers your phrase selections and offers them as candidates in future inputs
-- **Context-aware suggestions**: Learns bigram relationships between phrases over time
-- **Persistent storage**: All learned preferences are saved and available after program restart
-- **Incomplete pinyin handling**: Only saves complete pinyin phrases to dictionary
+### Core Functionality
+- **Incremental candidate selection**: Select phrases character by character or as complete sentences
+- **NBEST match handling**: Full sentence predictions when available (candidate type 2)
+- **User preference learning**: Remembers your phrase selections via `pinyin_remember_user_input()`
+- **Bigram training**: Learns phrase transitions through `pinyin_train()` for context-aware suggestions
+- **Persistent storage**: All learned preferences saved to `data/user_bigram.db` and user dictionaries
+- **Complete/incomplete pinyin validation**: Only saves valid complete pinyin to user dictionary
+
+### Learning Mechanisms
+1. **Phrase-Pinyin Association**: Direct phrase to pinyin mapping in user dictionary
+2. **Bigram Model**: Statistical model of phrase transitions (e.g., "我吃" → "泥巴")
+3. **Sentence Guessing**: Uses `pinyin_guess_sentence()` after each selection for better predictions
 
 ## Usage
 
@@ -33,7 +41,30 @@ choose: 1
 sentence: 你爸
 ```
 
-## How Prefix/Context Learning Works
+## Implementation Details
+
+### Based on ibus-libpinyin Architecture
+This implementation follows the same patterns used in ibus-libpinyin:
+
+1. **Candidate Selection Flow**:
+   - `pinyin_parse_more_full_pinyins()` - Parse input
+   - `pinyin_guess_candidates()` - Generate candidates for current position
+   - `pinyin_choose_candidate()` - Select a candidate
+   - `pinyin_guess_sentence()` - Predict rest of sentence
+   - `pinyin_train()` - Train bigram model
+   - `pinyin_remember_user_input()` - Remember phrase-pinyin association
+   - `pinyin_save()` - Persist to disk
+
+2. **Candidate Types**:
+   - **NBEST_MATCH (2)**: Full sentence match covering entire input
+   - **Normal (0)**: Regular phrase candidates
+   - **User candidates**: Phrases from user dictionary
+
+3. **Training Strategy**:
+   - Train with nbest index if not top choice
+   - Train at position 0 after all selections
+   - Remember user input for phrase-pinyin learning
+   - Save immediately for persistence
 
 The prefix feature uses **statistical bigram learning** implemented in libpinyin:
 

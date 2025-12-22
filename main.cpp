@@ -28,8 +28,10 @@
 #include <string.h>
 #include <string>
 
+// Configuration constants
 const int USER_DICTIONARY_INDEX = 7;
 const int USER_PHRASE_FREQUENCY = 100;
+const bool REMEMBER_EVERY_INPUT = true;  // Match ibus-libpinyin behavior
 
 // Read a line from stdin and remove trailing newline
 bool read_line(char** buffer, size_t* bufsize, const char* prompt) {
@@ -108,15 +110,46 @@ bool select_candidate(pinyin_instance_t* instance, char* input_buf,
     pinyin_get_candidate_type(instance, candidate, &type);
 
     if (type == NBEST_MATCH_CANDIDATE) {
-        sentence = word;
+        // NBEST match candidate represents a full sentence match
+        // Choose from position 0 since it covers the entire input
+        pinyin_choose_candidate(instance, 0, candidate);
+        
+        // Get the nbest index for training
+        guint8 index = 0;
+        pinyin_get_candidate_nbest_index(instance, candidate, &index);
+        
+        // Train if not the top choice
+        if (index != 0) {
+            pinyin_train(instance, index);
+        }
+        
+        // Get the full sentence
+        gchar* full_sentence = NULL;
+        pinyin_get_sentence(instance, index, &full_sentence);
+        if (full_sentence) {
+            sentence = full_sentence;
+            g_free(full_sentence);
+        }
+        
+        // Signal that we're done (consumed entire input)
+        *start_pos = strlen(input_buf);
     } else {
-        sentence += word;
+        // Normal/phrase candidate - incremental selection
+        if (type == NBEST_MATCH_CANDIDATE) {
+            sentence = word;
+        } else {
+            sentence += word;
+        }
+        
+        *start_pos = pinyin_choose_candidate(instance, *start_pos, candidate);
+        
+        // Guess sentence for better next predictions
+        pinyin_guess_sentence(instance);
     }
 
     fprintf(stdout, "sentence:%s\n", sentence.c_str());
     fflush(stdout);
 
-    *start_pos = pinyin_choose_candidate(instance, *start_pos, candidate);
     return true;
 }
 
@@ -136,7 +169,12 @@ std::string process_pinyin_input(pinyin_instance_t* instance, const char* pinyin
             break;
         }
 
-        select_candidate(instance, *buffer, &start, generated_sentence);
+        bool result = select_candidate(instance, *buffer, &start, generated_sentence);
+        
+        // If NBEST candidate was selected, we're done
+        if (start >= strlen(pinyin_input)) {
+            break;
+        }
     }
 
     return generated_sentence;
@@ -150,15 +188,20 @@ void learn_and_save(pinyin_context_t* context, pinyin_instance_t* instance,
         return;
     }
 
-    // Train bigram model with user selections (this is the key!)
+    // Train bigram model with user selections
+    // This is called after all candidate selections in the input loop
     pinyin_train(instance, 0);
 
-    // Remember user input like ibus-libpinyin does
-    // This teaches libpinyin the phrase-pinyin association and bigram context
-    pinyin_remember_user_input(instance, sentence.c_str(), -1);
+    // Remember user input - matches ibus-libpinyin behavior
+    // Only remember if configured and phrase is valid
+    if (REMEMBER_EVERY_INPUT && !sentence.empty()) {
+        pinyin_remember_user_input(instance, sentence.c_str(), -1);
+    }
 
-    // Add phrase to user dictionary (only if pinyin is complete)
-    add_to_user_dictionary(context, instance, sentence, pinyin_str, is_complete);
+    // Add complete phrases to user dictionary for direct lookup
+    if (is_complete) {
+        add_to_user_dictionary(context, instance, sentence, pinyin_str, is_complete);
+    }
 
     // Log what we're learning
     if (!previous_phrase.empty()) {

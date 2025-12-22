@@ -19,8 +19,43 @@ std::string get_last_phrases(pinyin_context_t* context, pinyin_instance_t* insta
         return "";
     }
 
-    // Use libpinyin to segment the text into phrases
-    if (!pinyin_phrase_segment(instance, text)) {
+    // Remove punctuation for phrase segmentation
+    // libpinyin's phrase_segment cannot handle punctuation
+    std::string clean_text;
+    const char* p = text;
+    while (*p) {
+        // Skip ASCII punctuation
+        if (*p == ',' || *p == '.' || *p == '!' || *p == '?' || *p == ';') {
+            p++;
+            continue;
+        }
+        
+        // Skip Chinese punctuation (UTF-8 multibyte)
+        // in Utf-8:
+        //
+        // Range Name,Range (Hex),Description
+        // CJK Unified Ideographs,4E00 - 9FFF,Common characters (most used)
+        // CJK Punctuation,3000 - 303F,"Symbols like 。, 《, 》"
+        // Ext. A,3400 - 4DBF,Rare/Ancient characters
+        // Compatibility,F900 - FAFF,Duplicate characters for legacy support
+
+        if ((unsigned char)*p == 0xEF && 
+            (unsigned char)*(p+1) == 0xBC && 
+            ((unsigned char)*(p+2) == 0x8C || // ，
+             (unsigned char)*(p+2) == 0x8E || // 。
+             (unsigned char)*(p+2) == 0x81 || // ！
+             (unsigned char)*(p+2) == 0x9F || // ？
+             (unsigned char)*(p+2) == 0x9B)) { // ；
+            p += 3;
+            continue;
+        }
+        
+        clean_text += *p;
+        p++;
+    }
+
+    // Use libpinyin to segment the cleaned text into phrases
+    if (!pinyin_phrase_segment(instance, clean_text.c_str())) {
         fprintf(stderr, "Failed to segment phrase\n");
         return "";
     }

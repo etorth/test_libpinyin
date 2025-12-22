@@ -74,28 +74,34 @@ void display_candidates(pinyin_instance_t* instance)
 }
 
 // Add phrase to user dictionary
-void add_to_user_dictionary(pinyin_context_t* context, pinyin_instance_t* instance, const std::string& phrase, const std::string& pinyin_str, bool is_complete)
+void add_to_user_dictionary(pinyin_context_t* context, pinyin_instance_t* instance,
+                            const std::string& phrase, const std::string& pinyin_str)
 {
     if (phrase.empty() || pinyin_str.empty()) {
         return;
     }
 
-    if (!is_complete) {
-        fprintf(stdout, "Skipped adding phrase '%s' - incomplete pinyin input\n", phrase.c_str());
-        return;
-    }
-
     import_iterator_t* iter = pinyin_begin_add_phrases(context, USER_DICTIONARY_INDEX);
-    bool added = pinyin_iterator_add_phrase(iter, phrase.c_str(), pinyin_str.c_str(), USER_PHRASE_FREQUENCY);
+    bool added = pinyin_iterator_add_phrase(iter, phrase.c_str(),
+                                           pinyin_str.c_str(), USER_PHRASE_FREQUENCY);
     pinyin_end_add_phrases(iter);
 
-    fprintf(stdout, "Added phrase '%s' (pinyin: %s): %s\n", phrase.c_str(), pinyin_str.c_str(), added ? "success" : "failed");
+    fprintf(stdout, "Added phrase '%s' (pinyin: %s): %s\n",
+            phrase.c_str(), pinyin_str.c_str(), added ? "success" : "failed");
 }
 
 // Process one candidate selection step
 bool select_candidate(pinyin_instance_t* instance, char* input_buf, size_t* start_pos, std::string& sentence)
 {
     int chosen = atoi(input_buf);
+
+    // Validate candidate index
+    guint num = 0;
+    pinyin_get_n_candidate(instance, &num);
+    if (chosen < 0 || (guint)chosen >= num) {
+        fprintf(stderr, "Error: Invalid candidate index %d (valid: 0-%u)\n", chosen, num - 1);
+        return false;
+    }
 
     lookup_candidate_t* candidate = NULL;
     pinyin_get_candidate(instance, chosen, &candidate);
@@ -161,7 +167,10 @@ std::string process_pinyin_input(pinyin_instance_t* instance, const char* pinyin
             break;
         }
 
-        bool result = select_candidate(instance, *buffer, &start, generated_sentence);
+        if (!select_candidate(instance, *buffer, &start, generated_sentence)) {
+            // Invalid selection, skip and continue
+            continue;
+        }
 
         // If NBEST candidate was selected, we're done
         if (start >= strlen(pinyin_input)) {
@@ -173,7 +182,9 @@ std::string process_pinyin_input(pinyin_instance_t* instance, const char* pinyin
 }
 
 // Learn from user input and save to dictionary
-void learn_and_save(pinyin_context_t* context, pinyin_instance_t* instance, const std::string& sentence, const std::string& pinyin_str, bool is_complete, const std::string& previous_phrase)
+void learn_and_save(pinyin_context_t* context, pinyin_instance_t* instance,
+                   const std::string& sentence, const std::string& pinyin_str,
+                   bool is_complete, const std::string& previous_phrase)
 {
     if (sentence.empty()) {
         return;
@@ -184,14 +195,16 @@ void learn_and_save(pinyin_context_t* context, pinyin_instance_t* instance, cons
     pinyin_train(instance, 0);
 
     // Remember user input - matches ibus-libpinyin behavior
-    // Only remember if configured and phrase is valid
-    if (REMEMBER_EVERY_INPUT && !sentence.empty()) {
+    if (REMEMBER_EVERY_INPUT) {
         pinyin_remember_user_input(instance, sentence.c_str(), -1);
     }
 
     // Add complete phrases to user dictionary for direct lookup
     if (is_complete) {
-        add_to_user_dictionary(context, instance, sentence, pinyin_str, is_complete);
+        add_to_user_dictionary(context, instance, sentence, pinyin_str);
+    } else {
+        fprintf(stdout, "Skipped adding phrase '%s' - incomplete pinyin input\n",
+                sentence.c_str());
     }
 
     // Log what we're learning
@@ -220,11 +233,21 @@ int main(int argc, char* argv[])
 
     // Initialize libpinyin
     pinyin_context_t* context = pinyin_init("data", "data");
+    if (!context) {
+        fprintf(stderr, "Error: Failed to initialize pinyin context\n");
+        return 1;
+    }
 
-    pinyin_option_t options = PINYIN_INCOMPLETE | PINYIN_CORRECT_ALL | USE_DIVIDED_TABLE | USE_RESPLIT_TABLE | DYNAMIC_ADJUST;
+    pinyin_option_t options = PINYIN_INCOMPLETE | PINYIN_CORRECT_ALL |
+                             USE_DIVIDED_TABLE | USE_RESPLIT_TABLE | DYNAMIC_ADJUST;
     pinyin_set_options(context, options);
 
     pinyin_instance_t* instance = pinyin_alloc_instance(context);
+    if (!instance) {
+        fprintf(stderr, "Error: Failed to allocate pinyin instance\n");
+        pinyin_fini(context);
+        return 1;
+    }
 
     // Input buffers
     char* prefixbuf = NULL;

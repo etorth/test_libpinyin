@@ -185,9 +185,6 @@ int main(int argc, char* argv[]) {
     // Context for bigram learning
     std::string previous_phrase;
 
-    // Skip first getline (compatibility with original code)
-    getline(&prefixbuf, &prefixsize, stdin);
-
     // Main input loop
     while (true) {
         // Read prefix (previous context)

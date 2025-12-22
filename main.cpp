@@ -144,8 +144,7 @@ int main(int argc, char * argv[]){
         if(start >= strlen(linebuf)){
             bool success = pinyin_remember_user_input(instance, generated_sentence.c_str(), 5);
             pinyin_train(instance, 0);
-            fprintf(stdout, "Remembered phrase '%s': %s\n",
-                    generated_sentence.c_str(), success ? "success" : "failed");
+            fprintf(stdout, "Remembered phrase '%s': %s\n", generated_sentence.c_str(), success ? "success" : "failed");
         }
         pinyin_reset(instance);
         pinyin_save(context);

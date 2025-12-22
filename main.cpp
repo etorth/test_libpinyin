@@ -70,7 +70,8 @@ int main(int argc, char * argv[]){
             break;
 
         size_t len = pinyin_parse_more_full_pinyins(instance, linebuf);
-        pinyin_guess_sentence_with_prefix(instance, prefixbuf);
+        // pinyin_guess_sentence_with_prefix(instance, prefixbuf);
+        // pinyin_guess_sentence(instance);
         // guint sort_option = SORT_BY_PHRASE_LENGTH | SORT_BY_FREQUENCY;
         // guint sort_option = SORT_BY_FREQUENCY;
         auto sort_option = SORT_BY_PHRASE_LENGTH_AND_PINYIN_LENGTH_AND_FREQUENCY;
@@ -140,7 +141,12 @@ int main(int argc, char * argv[]){
             start = pinyin_choose_candidate(instance, start, candidate);
         }
 
-        // pinyin_train(instance, 0);
+        if(start >= strlen(linebuf)){
+            bool success = pinyin_remember_user_input(instance, generated_sentence.c_str(), 5);
+            pinyin_train(instance, 0);
+            fprintf(stdout, "Remembered phrase '%s': %s\n",
+                    generated_sentence.c_str(), success ? "success" : "failed");
+        }
         pinyin_reset(instance);
         pinyin_save(context);
     }

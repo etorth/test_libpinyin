@@ -151,14 +151,17 @@ void learn_and_save(pinyin_context_t* context, pinyin_instance_t* instance,
     }
 
     // Train bigram model with user selections
+    // This learns phrase transitions: after "我是", "你爸" becomes more likely
     pinyin_train(instance, 0);
 
     // Add phrase to user dictionary (only if pinyin is complete)
     add_to_user_dictionary(context, instance, sentence, pinyin_str, is_complete);
 
-    // Log bigram learning for context
+    // Log the bigram relationship being learned
+    // Over time, libpinyin will learn that after the previous_phrase,
+    // this sentence is more likely to appear
     if (!previous_phrase.empty() && !sentence.empty()) {
-        fprintf(stdout, "Learned bigram context: '%s' + '%s'\n",
+        fprintf(stdout, "Learning bigram: '%s' → '%s' (builds over time)\n",
                 previous_phrase.c_str(), sentence.c_str());
     }
 
@@ -167,6 +170,17 @@ void learn_and_save(pinyin_context_t* context, pinyin_instance_t* instance,
 }
 
 int main(int argc, char* argv[]) {
+    // Create user.conf if it doesn't exist to avoid warning message
+    FILE* check_file = fopen("data/user.conf", "r");
+    if (!check_file) {
+        FILE* create_file = fopen("data/user.conf", "w");
+        if (create_file) {
+            fclose(create_file);
+        }
+    } else {
+        fclose(check_file);
+    }
+
     // Initialize libpinyin
     pinyin_context_t* context = pinyin_init("data", "data");
 

@@ -150,18 +150,19 @@ void learn_and_save(pinyin_context_t* context, pinyin_instance_t* instance,
         return;
     }
 
-    // Train bigram model with user selections
-    // This learns phrase transitions: after "我是", "你爸" becomes more likely
+    // Train bigram model with user selections (this is the key!)
     pinyin_train(instance, 0);
+
+    // Remember user input like ibus-libpinyin does
+    // This teaches libpinyin the phrase-pinyin association and bigram context
+    pinyin_remember_user_input(instance, sentence.c_str(), -1);
 
     // Add phrase to user dictionary (only if pinyin is complete)
     add_to_user_dictionary(context, instance, sentence, pinyin_str, is_complete);
 
-    // Log the bigram relationship being learned
-    // Over time, libpinyin will learn that after the previous_phrase,
-    // this sentence is more likely to appear
-    if (!previous_phrase.empty() && !sentence.empty()) {
-        fprintf(stdout, "Learning bigram: '%s' → '%s' (builds over time)\n",
+    // Log what we're learning
+    if (!previous_phrase.empty()) {
+        fprintf(stdout, "Learning: '%s' → '%s'\n",
                 previous_phrase.c_str(), sentence.c_str());
     }
 

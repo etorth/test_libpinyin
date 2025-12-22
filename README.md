@@ -35,13 +35,33 @@ sentence: 你爸
 
 ## How Prefix/Context Learning Works
 
-The prefix feature uses **bigram learning** which builds up over time:
+The prefix feature uses **statistical bigram learning** implemented in libpinyin:
 
-1. When you enter prefix "我是" and then select "你爸" for "niba", the system learns this transition
-2. The more you make this selection, the stronger the association becomes
-3. After several training iterations, "你爸" will be ranked higher when the prefix is "我是"
+### Training Process:
+1. When you enter prefix "我吃" and select "泥巴" for "niba", the system records this transition
+2. `pinyin_train()` updates the bigram probability model  
+3. `pinyin_remember_user_input()` saves the phrase-pinyin association
+4. Data is saved to `data/user_bigram.db`
 
-**Note**: Context-aware ranking requires training data. The first few times you'll need to manually select the correct candidate. After repeated use, the system learns your patterns and offers better suggestions.
+### How It Affects Ranking:
+- libpinyin automatically consults the bigram model during `pinyin_guess_candidates()`
+- After the SAME prefix→phrase pattern is selected **10-20 times**, the ranking will noticeably improve
+- Different prefixes build independent statistics: "我吃"→"泥巴" vs "我是"→"你爸"
+
+### Example:
+```bash
+# First 10-15 times with prefix "我吃" + "niba" → select "泥巴"
+# Learning: '我吃' → '泥巴'
+
+# Then try prefix "我是" + "niba" → select "你爸" 10-15 times  
+# Learning: '我是' → '你爸'
+
+# After sufficient training:
+# With prefix "我吃": "泥巴" ranks higher
+# With prefix "我是": "你爸" ranks higher
+```
+
+**Note**: This is how all modern IMEs work (including ibus-libpinyin). The system learns from your usage patterns over time rather than providing immediate changes.
 
 ## Files
 

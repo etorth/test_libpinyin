@@ -108,41 +108,34 @@ bool select_candidate(pinyin_instance_t* instance, char* input_buf, size_t* star
 
     if (type == NBEST_MATCH_CANDIDATE) {
         // NBEST match candidate represents a full sentence match
-        // Choose from position 0 since it covers the entire input
-        pinyin_choose_candidate(instance, 0, candidate);
+        // According to pinyin.cpp, choose from position 0 and it returns matrix.size()-1
+        *start_pos = pinyin_choose_candidate(instance, 0, candidate);
 
         // Get the nbest index for training
         guint8 index = 0;
         pinyin_get_candidate_nbest_index(instance, candidate, &index);
 
-        // Train if not the top choice
+        // Train if not the top choice (ibus-libpinyin pattern)
         if (index != 0) {
             pinyin_train(instance, index);
         }
 
-        // Get the full sentence
+        // Get the full sentence using the nbest index
         gchar* full_sentence = NULL;
         pinyin_get_sentence(instance, index, &full_sentence);
         if (full_sentence) {
             sentence = full_sentence;
             g_free(full_sentence);
         }
-
-        // Signal that we're done (consumed entire input)
-        *start_pos = strlen(input_buf);
     }
     else {
         // Normal/phrase candidate - incremental selection
-        if (type == NBEST_MATCH_CANDIDATE) {
-            sentence = word;
-        }
-        else {
-            sentence += word;
-        }
+        sentence += word;
 
+        // Choose candidate and get new position
         *start_pos = pinyin_choose_candidate(instance, *start_pos, candidate);
 
-        // Guess sentence for better next predictions
+        // Guess sentence for better next predictions (ibus-libpinyin pattern)
         pinyin_guess_sentence(instance);
     }
 

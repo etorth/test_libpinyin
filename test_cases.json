@@ -1,0 +1,1402 @@
+[
+  {
+    "id": 1,
+    "prefix": "",
+    "pinyin": "xiangjiao",
+    "expected_contains": "香蕉",
+    "description": "Basic: 香蕉"
+  },
+  {
+    "id": 2,
+    "prefix": "",
+    "pinyin": "xigua",
+    "expected_contains": "西瓜",
+    "description": "Basic: 西瓜"
+  },
+  {
+    "id": 3,
+    "prefix": "",
+    "pinyin": "wohengaoxing",
+    "expected_contains": "我很高兴",
+    "description": "Basic: 我很高兴"
+  },
+  {
+    "id": 4,
+    "prefix": "",
+    "pinyin": "feichangganxie",
+    "expected_contains": "非常感谢",
+    "description": "Basic: 非常感谢"
+  },
+  {
+    "id": 5,
+    "prefix": "",
+    "pinyin": "jiayou",
+    "expected_contains": "加油",
+    "description": "Basic: 加油"
+  },
+  {
+    "id": 6,
+    "prefix": "",
+    "pinyin": "mingtian",
+    "expected_contains": "明天",
+    "description": "Basic: 明天"
+  },
+  {
+    "id": 7,
+    "prefix": "",
+    "pinyin": "haode",
+    "expected_contains": "好的",
+    "description": "Basic: 好的"
+  },
+  {
+    "id": 8,
+    "prefix": "",
+    "pinyin": "hongse",
+    "expected_contains": "红色",
+    "description": "Basic: 红色"
+  },
+  {
+    "id": 9,
+    "prefix": "",
+    "pinyin": "woaizhongguo",
+    "expected_contains": "我爱中国",
+    "description": "Basic: 我爱中国"
+  },
+  {
+    "id": 10,
+    "prefix": "",
+    "pinyin": "ditiezhan",
+    "expected_contains": "地铁站",
+    "description": "Basic: 地铁站"
+  },
+  {
+    "id": 11,
+    "prefix": "",
+    "pinyin": "duibuqi",
+    "expected_contains": "对不起",
+    "description": "Basic: 对不起"
+  },
+  {
+    "id": 12,
+    "prefix": "",
+    "pinyin": "yiyuan",
+    "expected_contains": "医院",
+    "description": "Basic: 医院"
+  },
+  {
+    "id": 13,
+    "prefix": "",
+    "pinyin": "baba",
+    "expected_contains": "爸爸",
+    "description": "Basic: 爸爸"
+  },
+  {
+    "id": 14,
+    "prefix": "",
+    "pinyin": "huochezhan",
+    "expected_contains": "火车站",
+    "description": "Basic: 火车站"
+  },
+  {
+    "id": 15,
+    "prefix": "",
+    "pinyin": "bushi",
+    "expected_contains": "不是",
+    "description": "Basic: 不是"
+  },
+  {
+    "id": 16,
+    "prefix": "",
+    "pinyin": "er",
+    "expected_contains": "二",
+    "description": "Basic: 二"
+  },
+  {
+    "id": 17,
+    "prefix": "",
+    "pinyin": "bukeqi",
+    "expected_contains": "不客气",
+    "description": "Basic: 不客气"
+  },
+  {
+    "id": 18,
+    "prefix": "",
+    "pinyin": "shi",
+    "expected_contains": "十",
+    "description": "Basic: 十"
+  },
+  {
+    "id": 19,
+    "prefix": "",
+    "pinyin": "changge",
+    "expected_contains": "唱歌",
+    "description": "Basic: 唱歌"
+  },
+  {
+    "id": 20,
+    "prefix": "",
+    "pinyin": "ditiezhan",
+    "expected_contains": "地铁站",
+    "description": "Basic: 地铁站"
+  },
+  {
+    "id": 21,
+    "prefix": "",
+    "pinyin": "woxiangni",
+    "expected_contains": "我想你",
+    "description": "Basic: 我想你"
+  },
+  {
+    "id": 22,
+    "prefix": "",
+    "pinyin": "shangban",
+    "expected_contains": "上班",
+    "description": "Basic: 上班"
+  },
+  {
+    "id": 23,
+    "prefix": "",
+    "pinyin": "er",
+    "expected_contains": "二",
+    "description": "Basic: 二"
+  },
+  {
+    "id": 24,
+    "prefix": "",
+    "pinyin": "kanshu",
+    "expected_contains": "看书",
+    "description": "Basic: 看书"
+  },
+  {
+    "id": 25,
+    "prefix": "",
+    "pinyin": "baba",
+    "expected_contains": "爸爸",
+    "description": "Basic: 爸爸"
+  },
+  {
+    "id": 26,
+    "prefix": "",
+    "pinyin": "mingtian",
+    "expected_contains": "明天",
+    "description": "Basic: 明天"
+  },
+  {
+    "id": 27,
+    "prefix": "",
+    "pinyin": "kafeiting",
+    "expected_contains": "咖啡厅",
+    "description": "Basic: 咖啡厅"
+  },
+  {
+    "id": 28,
+    "prefix": "",
+    "pinyin": "qichuang",
+    "expected_contains": "起床",
+    "description": "Basic: 起床"
+  },
+  {
+    "id": 29,
+    "prefix": "",
+    "pinyin": "honglvdeng",
+    "expected_contains": "红绿灯",
+    "description": "Basic: 红绿灯"
+  },
+  {
+    "id": 30,
+    "prefix": "",
+    "pinyin": "meimei",
+    "expected_contains": "妹妹",
+    "description": "Basic: 妹妹"
+  },
+  {
+    "id": 31,
+    "prefix": "",
+    "pinyin": "bukeqi",
+    "expected_contains": "不客气",
+    "description": "Basic: 不客气"
+  },
+  {
+    "id": 32,
+    "prefix": "",
+    "pinyin": "honglvdeng",
+    "expected_contains": "红绿灯",
+    "description": "Basic: 红绿灯"
+  },
+  {
+    "id": 33,
+    "prefix": "",
+    "pinyin": "jiayou",
+    "expected_contains": "加油",
+    "description": "Basic: 加油"
+  },
+  {
+    "id": 34,
+    "prefix": "",
+    "pinyin": "yi",
+    "expected_contains": "一",
+    "description": "Basic: 一"
+  },
+  {
+    "id": 35,
+    "prefix": "",
+    "pinyin": "heshui",
+    "expected_contains": "喝水",
+    "description": "Basic: 喝水"
+  },
+  {
+    "id": 36,
+    "prefix": "",
+    "pinyin": "youyong",
+    "expected_contains": "游泳",
+    "description": "Basic: 游泳"
+  },
+  {
+    "id": 37,
+    "prefix": "",
+    "pinyin": "xiayu",
+    "expected_contains": "下雨",
+    "description": "Basic: 下雨"
+  },
+  {
+    "id": 38,
+    "prefix": "",
+    "pinyin": "honglvdeng",
+    "expected_contains": "红绿灯",
+    "description": "Basic: 红绿灯"
+  },
+  {
+    "id": 39,
+    "prefix": "",
+    "pinyin": "wohengaoxing",
+    "expected_contains": "我很高兴",
+    "description": "Basic: 我很高兴"
+  },
+  {
+    "id": 40,
+    "prefix": "",
+    "pinyin": "san",
+    "expected_contains": "三",
+    "description": "Basic: 三"
+  },
+  {
+    "id": 41,
+    "prefix": "",
+    "pinyin": "woqushangban",
+    "expected_contains": "我去上班",
+    "description": "Basic: 我去上班"
+  },
+  {
+    "id": 42,
+    "prefix": "",
+    "pinyin": "bukeqi",
+    "expected_contains": "不客气",
+    "description": "Basic: 不客气"
+  },
+  {
+    "id": 43,
+    "prefix": "",
+    "pinyin": "yeye",
+    "expected_contains": "爷爷",
+    "description": "Basic: 爷爷"
+  },
+  {
+    "id": 44,
+    "prefix": "",
+    "pinyin": "paobu",
+    "expected_contains": "跑步",
+    "description": "Basic: 跑步"
+  },
+  {
+    "id": 45,
+    "prefix": "",
+    "pinyin": "chifan",
+    "expected_contains": "吃饭",
+    "description": "Basic: 吃饭"
+  },
+  {
+    "id": 46,
+    "prefix": "",
+    "pinyin": "er",
+    "expected_contains": "二",
+    "description": "Basic: 二"
+  },
+  {
+    "id": 47,
+    "prefix": "",
+    "pinyin": "huochezhan",
+    "expected_contains": "火车站",
+    "description": "Basic: 火车站"
+  },
+  {
+    "id": 48,
+    "prefix": "",
+    "pinyin": "chifan",
+    "expected_contains": "吃饭",
+    "description": "Basic: 吃饭"
+  },
+  {
+    "id": 49,
+    "prefix": "",
+    "pinyin": "yiyuan",
+    "expected_contains": "医院",
+    "description": "Basic: 医院"
+  },
+  {
+    "id": 50,
+    "prefix": "",
+    "pinyin": "fandian",
+    "expected_contains": "饭店",
+    "description": "Basic: 饭店"
+  },
+  {
+    "id": 51,
+    "prefix": "你",
+    "pinyin": "shangban",
+    "expected_contains": "上班",
+    "description": "With prefix '你': 上班"
+  },
+  {
+    "id": 52,
+    "prefix": "他",
+    "pinyin": "woqushangban",
+    "expected_contains": "我去上班",
+    "description": "With prefix '他': 我去上班"
+  },
+  {
+    "id": 53,
+    "prefix": "非常",
+    "pinyin": "taihaole",
+    "expected_contains": "太好了",
+    "description": "With prefix '非常': 太好了"
+  },
+  {
+    "id": 54,
+    "prefix": "",
+    "pinyin": "meimei",
+    "expected_contains": "妹妹",
+    "description": "With prefix '': 妹妹"
+  },
+  {
+    "id": 55,
+    "prefix": "我",
+    "pinyin": "womenyiqichifan",
+    "expected_contains": "我们一起吃饭",
+    "description": "With prefix '我': 我们一起吃饭"
+  },
+  {
+    "id": 56,
+    "prefix": "非常",
+    "pinyin": "zhegehenhaochi",
+    "expected_contains": "这个很好吃",
+    "description": "With prefix '非常': 这个很好吃"
+  },
+  {
+    "id": 57,
+    "prefix": "明天",
+    "pinyin": "zuotian",
+    "expected_contains": "昨天",
+    "description": "With prefix '明天': 昨天"
+  },
+  {
+    "id": 58,
+    "prefix": "我们",
+    "pinyin": "shangban",
+    "expected_contains": "上班",
+    "description": "With prefix '我们': 上班"
+  },
+  {
+    "id": 59,
+    "prefix": "我要",
+    "pinyin": "pingguo",
+    "expected_contains": "苹果",
+    "description": "With prefix '我要': 苹果"
+  },
+  {
+    "id": 60,
+    "prefix": "我们",
+    "pinyin": "zhegehenhaochi",
+    "expected_contains": "这个很好吃",
+    "description": "With prefix '我们': 这个很好吃"
+  },
+  {
+    "id": 61,
+    "prefix": "应该",
+    "pinyin": "dianyingyuan",
+    "expected_contains": "电影院",
+    "description": "With prefix '应该': 电影院"
+  },
+  {
+    "id": 62,
+    "prefix": "确实",
+    "pinyin": "zaijian",
+    "expected_contains": "再见",
+    "description": "With prefix '确实': 再见"
+  },
+  {
+    "id": 63,
+    "prefix": "他",
+    "pinyin": "qian",
+    "expected_contains": "千",
+    "description": "With prefix '他': 千"
+  },
+  {
+    "id": 64,
+    "prefix": "应该",
+    "pinyin": "xiaban",
+    "expected_contains": "下班",
+    "description": "With prefix '应该': 下班"
+  },
+  {
+    "id": 65,
+    "prefix": "可能",
+    "pinyin": "lanse",
+    "expected_contains": "蓝色",
+    "description": "With prefix '可能': 蓝色"
+  },
+  {
+    "id": 66,
+    "prefix": "应该",
+    "pinyin": "zhunihaoyun",
+    "expected_contains": "祝你好运",
+    "description": "With prefix '应该': 祝你好运"
+  },
+  {
+    "id": 67,
+    "prefix": "很好",
+    "pinyin": "gege",
+    "expected_contains": "哥哥",
+    "description": "With prefix '很好': 哥哥"
+  },
+  {
+    "id": 68,
+    "prefix": "我",
+    "pinyin": "huochezhan",
+    "expected_contains": "火车站",
+    "description": "With prefix '我': 火车站"
+  },
+  {
+    "id": 69,
+    "prefix": "明天",
+    "pinyin": "duibuqi",
+    "expected_contains": "对不起",
+    "description": "With prefix '明天': 对不起"
+  },
+  {
+    "id": 70,
+    "prefix": "他",
+    "pinyin": "nainai",
+    "expected_contains": "奶奶",
+    "description": "With prefix '他': 奶奶"
+  },
+  {
+    "id": 71,
+    "prefix": "特别",
+    "pinyin": "womenyiqichifan",
+    "expected_contains": "我们一起吃饭",
+    "description": "With prefix '特别': 我们一起吃饭"
+  },
+  {
+    "id": 72,
+    "prefix": "应该",
+    "pinyin": "fense",
+    "expected_contains": "粉色",
+    "description": "With prefix '应该': 粉色"
+  },
+  {
+    "id": 73,
+    "prefix": "我们",
+    "pinyin": "mifan",
+    "expected_contains": "米饭",
+    "description": "With prefix '我们': 米饭"
+  },
+  {
+    "id": 74,
+    "prefix": "他",
+    "pinyin": "huahua",
+    "expected_contains": "画画",
+    "description": "With prefix '他': 画画"
+  },
+  {
+    "id": 75,
+    "prefix": "应该",
+    "pinyin": "youyong",
+    "expected_contains": "游泳",
+    "description": "With prefix '应该': 游泳"
+  },
+  {
+    "id": 76,
+    "prefix": "当然",
+    "pinyin": "shi",
+    "expected_contains": "十",
+    "description": "With prefix '当然': 十"
+  },
+  {
+    "id": 77,
+    "prefix": "明天",
+    "pinyin": "huochezhan",
+    "expected_contains": "火车站",
+    "description": "With prefix '明天': 火车站"
+  },
+  {
+    "id": 78,
+    "prefix": "今天",
+    "pinyin": "woshixuesheng",
+    "expected_contains": "我是学生",
+    "description": "With prefix '今天': 我是学生"
+  },
+  {
+    "id": 79,
+    "prefix": "明天",
+    "pinyin": "chuzuche",
+    "expected_contains": "出租车",
+    "description": "With prefix '明天': 出租车"
+  },
+  {
+    "id": 80,
+    "prefix": "特别",
+    "pinyin": "xiezi",
+    "expected_contains": "写字",
+    "description": "With prefix '特别': 写字"
+  },
+  {
+    "id": 81,
+    "prefix": "一定",
+    "pinyin": "daqiu",
+    "expected_contains": "打球",
+    "description": "With prefix '一定': 打球"
+  },
+  {
+    "id": 82,
+    "prefix": "一定",
+    "pinyin": "xiaban",
+    "expected_contains": "下班",
+    "description": "With prefix '一定': 下班"
+  },
+  {
+    "id": 83,
+    "prefix": "一定",
+    "pinyin": "hongse",
+    "expected_contains": "红色",
+    "description": "With prefix '一定': 红色"
+  },
+  {
+    "id": 84,
+    "prefix": "我们",
+    "pinyin": "er",
+    "expected_contains": "二",
+    "description": "With prefix '我们': 二"
+  },
+  {
+    "id": 85,
+    "prefix": "非常",
+    "pinyin": "zuotian",
+    "expected_contains": "昨天",
+    "description": "With prefix '非常': 昨天"
+  },
+  {
+    "id": 86,
+    "prefix": "他",
+    "pinyin": "lvse",
+    "expected_contains": "绿色",
+    "description": "With prefix '他': 绿色"
+  },
+  {
+    "id": 87,
+    "prefix": "也许",
+    "pinyin": "gonggongqiche",
+    "expected_contains": "公共汽车",
+    "description": "With prefix '也许': 公共汽车"
+  },
+  {
+    "id": 88,
+    "prefix": "一定",
+    "pinyin": "jiejie",
+    "expected_contains": "姐姐",
+    "description": "With prefix '一定': 姐姐"
+  },
+  {
+    "id": 89,
+    "prefix": "他",
+    "pinyin": "didi",
+    "expected_contains": "弟弟",
+    "description": "With prefix '他': 弟弟"
+  },
+  {
+    "id": 90,
+    "prefix": "我想",
+    "pinyin": "pingguo",
+    "expected_contains": "苹果",
+    "description": "With prefix '我想': 苹果"
+  },
+  {
+    "id": 91,
+    "prefix": "应该",
+    "pinyin": "wan",
+    "expected_contains": "万",
+    "description": "With prefix '应该': 万"
+  },
+  {
+    "id": 92,
+    "prefix": "非常",
+    "pinyin": "fandian",
+    "expected_contains": "饭店",
+    "description": "With prefix '非常': 饭店"
+  },
+  {
+    "id": 93,
+    "prefix": "不要",
+    "pinyin": "jiayou",
+    "expected_contains": "加油",
+    "description": "With prefix '不要': 加油"
+  },
+  {
+    "id": 94,
+    "prefix": "一定",
+    "pinyin": "lvse",
+    "expected_contains": "绿色",
+    "description": "With prefix '一定': 绿色"
+  },
+  {
+    "id": 95,
+    "prefix": "也许",
+    "pinyin": "honglvdeng",
+    "expected_contains": "红绿灯",
+    "description": "With prefix '也许': 红绿灯"
+  },
+  {
+    "id": 96,
+    "prefix": "",
+    "pinyin": "chifan",
+    "expected_contains": "吃饭",
+    "description": "With prefix '': 吃饭"
+  },
+  {
+    "id": 97,
+    "prefix": "我",
+    "pinyin": "dianyingyuan",
+    "expected_contains": "电影院",
+    "description": "With prefix '我': 电影院"
+  },
+  {
+    "id": 98,
+    "prefix": "也许",
+    "pinyin": "zhegehenhaochi",
+    "expected_contains": "这个很好吃",
+    "description": "With prefix '也许': 这个很好吃"
+  },
+  {
+    "id": 99,
+    "prefix": "真的",
+    "pinyin": "huochezhan",
+    "expected_contains": "火车站",
+    "description": "With prefix '真的': 火车站"
+  },
+  {
+    "id": 100,
+    "prefix": "我想",
+    "pinyin": "baba",
+    "expected_contains": "爸爸",
+    "description": "With prefix '我想': 爸爸"
+  },
+  {
+    "id": 101,
+    "prefix": "",
+    "pinyin": "paobudianyingyuan",
+    "expected_contains": "跑步",
+    "description": "Long: 跑步电影院"
+  },
+  {
+    "id": 102,
+    "prefix": "",
+    "pinyin": "jintianlanse",
+    "expected_contains": "今天",
+    "description": "Long: 今天蓝色"
+  },
+  {
+    "id": 103,
+    "prefix": "",
+    "pinyin": "tushuguannainai",
+    "expected_contains": "图书馆",
+    "description": "Long: 图书馆奶奶"
+  },
+  {
+    "id": 104,
+    "prefix": "我觉得",
+    "pinyin": "meiguanxier",
+    "expected_contains": "没关系",
+    "description": "Long: 没关系二"
+  },
+  {
+    "id": 105,
+    "prefix": "我觉得",
+    "pinyin": "gonggongqichezoulu",
+    "expected_contains": "公共汽车",
+    "description": "Long: 公共汽车走路"
+  },
+  {
+    "id": 106,
+    "prefix": "我看到",
+    "pinyin": "youyongduibuqi",
+    "expected_contains": "游泳",
+    "description": "Long: 游泳对不起"
+  },
+  {
+    "id": 107,
+    "prefix": "我认为",
+    "pinyin": "feichangganxiebaise",
+    "expected_contains": "非常感谢",
+    "description": "Long: 非常感谢白色"
+  },
+  {
+    "id": 108,
+    "prefix": "我认为",
+    "pinyin": "mingtianwoqushangban",
+    "expected_contains": "明天",
+    "description": "Long: 明天我去上班"
+  },
+  {
+    "id": 109,
+    "prefix": "",
+    "pinyin": "zoulushangban",
+    "expected_contains": "走路",
+    "description": "Long: 走路上班"
+  },
+  {
+    "id": 110,
+    "prefix": "我认为",
+    "pinyin": "jintiantianqihenhaohonglvdeng",
+    "expected_contains": "今天天气很好",
+    "description": "Long: 今天天气很好红绿灯"
+  },
+  {
+    "id": 111,
+    "prefix": "",
+    "pinyin": "henrewomenyiqichifan",
+    "expected_contains": "很热",
+    "description": "Long: 很热我们一起吃饭"
+  },
+  {
+    "id": 112,
+    "prefix": "我认为",
+    "pinyin": "baisejintiantianqihenhao",
+    "expected_contains": "白色",
+    "description": "Long: 白色今天天气很好"
+  },
+  {
+    "id": 113,
+    "prefix": "",
+    "pinyin": "jiaozididi",
+    "expected_contains": "饺子",
+    "description": "Long: 饺子弟弟"
+  },
+  {
+    "id": 114,
+    "prefix": "我认为",
+    "pinyin": "jiaoziqingtian",
+    "expected_contains": "饺子",
+    "description": "Long: 饺子晴天"
+  },
+  {
+    "id": 115,
+    "prefix": "我觉得",
+    "pinyin": "lvsedidi",
+    "expected_contains": "绿色",
+    "description": "Long: 绿色弟弟"
+  },
+  {
+    "id": 116,
+    "prefix": "我看到",
+    "pinyin": "paobujintian",
+    "expected_contains": "跑步",
+    "description": "Long: 跑步今天"
+  },
+  {
+    "id": 117,
+    "prefix": "",
+    "pinyin": "woxiangniheise",
+    "expected_contains": "我想你",
+    "description": "Long: 我想你黑色"
+  },
+  {
+    "id": 118,
+    "prefix": "我认为",
+    "pinyin": "shidemeimei",
+    "expected_contains": "是的",
+    "description": "Long: 是的妹妹"
+  },
+  {
+    "id": 119,
+    "prefix": "我看到",
+    "pinyin": "woqushangbanzoulu",
+    "expected_contains": "我去上班",
+    "description": "Long: 我去上班走路"
+  },
+  {
+    "id": 120,
+    "prefix": "我看到",
+    "pinyin": "wohengaoxingwoaini",
+    "expected_contains": "我很高兴",
+    "description": "Long: 我很高兴我爱你"
+  },
+  {
+    "id": 121,
+    "prefix": "",
+    "pinyin": "nihao",
+    "expected_contains": "你好",
+    "description": "Repeat test: 你好"
+  },
+  {
+    "id": 122,
+    "prefix": "你知道",
+    "pinyin": "xiexie",
+    "expected_contains": "谢谢",
+    "description": "Repeat test: 谢谢"
+  },
+  {
+    "id": 123,
+    "prefix": "我想说",
+    "pinyin": "woaini",
+    "expected_contains": "我爱你",
+    "description": "Repeat test: 我爱你"
+  },
+  {
+    "id": 124,
+    "prefix": "你知道",
+    "pinyin": "chifan",
+    "expected_contains": "吃饭",
+    "description": "Repeat test: 吃饭"
+  },
+  {
+    "id": 125,
+    "prefix": "",
+    "pinyin": "zaijian",
+    "expected_contains": "再见",
+    "description": "Repeat test: 再见"
+  },
+  {
+    "id": 126,
+    "prefix": "",
+    "pinyin": "nihao",
+    "expected_contains": "你好",
+    "description": "Repeat test: 你好"
+  },
+  {
+    "id": 127,
+    "prefix": "我想说",
+    "pinyin": "xiexie",
+    "expected_contains": "谢谢",
+    "description": "Repeat test: 谢谢"
+  },
+  {
+    "id": 128,
+    "prefix": "",
+    "pinyin": "woaini",
+    "expected_contains": "我爱你",
+    "description": "Repeat test: 我爱你"
+  },
+  {
+    "id": 129,
+    "prefix": "我想说",
+    "pinyin": "chifan",
+    "expected_contains": "吃饭",
+    "description": "Repeat test: 吃饭"
+  },
+  {
+    "id": 130,
+    "prefix": "我想说",
+    "pinyin": "zaijian",
+    "expected_contains": "再见",
+    "description": "Repeat test: 再见"
+  },
+  {
+    "id": 131,
+    "prefix": "你知道",
+    "pinyin": "nihao",
+    "expected_contains": "你好",
+    "description": "Repeat test: 你好"
+  },
+  {
+    "id": 132,
+    "prefix": "我想说",
+    "pinyin": "xiexie",
+    "expected_contains": "谢谢",
+    "description": "Repeat test: 谢谢"
+  },
+  {
+    "id": 133,
+    "prefix": "你知道",
+    "pinyin": "woaini",
+    "expected_contains": "我爱你",
+    "description": "Repeat test: 我爱你"
+  },
+  {
+    "id": 134,
+    "prefix": "你知道",
+    "pinyin": "chifan",
+    "expected_contains": "吃饭",
+    "description": "Repeat test: 吃饭"
+  },
+  {
+    "id": 135,
+    "prefix": "你知道",
+    "pinyin": "zaijian",
+    "expected_contains": "再见",
+    "description": "Repeat test: 再见"
+  },
+  {
+    "id": 136,
+    "prefix": "你知道",
+    "pinyin": "nihao",
+    "expected_contains": "你好",
+    "description": "Repeat test: 你好"
+  },
+  {
+    "id": 137,
+    "prefix": "",
+    "pinyin": "xiexie",
+    "expected_contains": "谢谢",
+    "description": "Repeat test: 谢谢"
+  },
+  {
+    "id": 138,
+    "prefix": "我想说",
+    "pinyin": "woaini",
+    "expected_contains": "我爱你",
+    "description": "Repeat test: 我爱你"
+  },
+  {
+    "id": 139,
+    "prefix": "我想说",
+    "pinyin": "chifan",
+    "expected_contains": "吃饭",
+    "description": "Repeat test: 吃饭"
+  },
+  {
+    "id": 140,
+    "prefix": "我想说",
+    "pinyin": "zaijian",
+    "expected_contains": "再见",
+    "description": "Repeat test: 再见"
+  },
+  {
+    "id": 141,
+    "prefix": "",
+    "pinyin": "nihao",
+    "expected_contains": "你好",
+    "description": "Repeat test: 你好"
+  },
+  {
+    "id": 142,
+    "prefix": "",
+    "pinyin": "xiexie",
+    "expected_contains": "谢谢",
+    "description": "Repeat test: 谢谢"
+  },
+  {
+    "id": 143,
+    "prefix": "我想说",
+    "pinyin": "woaini",
+    "expected_contains": "我爱你",
+    "description": "Repeat test: 我爱你"
+  },
+  {
+    "id": 144,
+    "prefix": "",
+    "pinyin": "chifan",
+    "expected_contains": "吃饭",
+    "description": "Repeat test: 吃饭"
+  },
+  {
+    "id": 145,
+    "prefix": "",
+    "pinyin": "zaijian",
+    "expected_contains": "再见",
+    "description": "Repeat test: 再见"
+  },
+  {
+    "id": 146,
+    "prefix": "你知道",
+    "pinyin": "nihao",
+    "expected_contains": "你好",
+    "description": "Repeat test: 你好"
+  },
+  {
+    "id": 147,
+    "prefix": "",
+    "pinyin": "xiexie",
+    "expected_contains": "谢谢",
+    "description": "Repeat test: 谢谢"
+  },
+  {
+    "id": 148,
+    "prefix": "",
+    "pinyin": "woaini",
+    "expected_contains": "我爱你",
+    "description": "Repeat test: 我爱你"
+  },
+  {
+    "id": 149,
+    "prefix": "你知道",
+    "pinyin": "chifan",
+    "expected_contains": "吃饭",
+    "description": "Repeat test: 吃饭"
+  },
+  {
+    "id": 150,
+    "prefix": "你知道",
+    "pinyin": "zaijian",
+    "expected_contains": "再见",
+    "description": "Repeat test: 再见"
+  },
+  {
+    "id": 151,
+    "prefix": "",
+    "pinyin": "wojintianraoqvxuexiao",
+    "expected_contains": null,
+    "description": "Edge case: wojintianraoqvxuexiao"
+  },
+  {
+    "id": 152,
+    "prefix": "",
+    "pinyin": "nimingtianyoushijianjma",
+    "expected_contains": null,
+    "description": "Edge case: nimingtianyoushijianjma"
+  },
+  {
+    "id": 153,
+    "prefix": "",
+    "pinyin": "womenyiqichiwaanfan",
+    "expected_contains": null,
+    "description": "Edge case: womenyiqichiwaanfan"
+  },
+  {
+    "id": 154,
+    "prefix": "",
+    "pinyin": "zheshiwodehaopenngyou",
+    "expected_contains": null,
+    "description": "Edge case: zheshiwodehaopenngyou"
+  },
+  {
+    "id": 155,
+    "prefix": "",
+    "pinyin": "tahenxihuankandianying",
+    "expected_contains": null,
+    "description": "Edge case: tahenxihuankandianying"
+  },
+  {
+    "id": 156,
+    "prefix": "",
+    "pinyin": "woyaomaihennduodongxi",
+    "expected_contains": null,
+    "description": "Edge case: woyaomaihennduodongxi"
+  },
+  {
+    "id": 157,
+    "prefix": "",
+    "pinyin": "jintiantianqizhenbuucuo",
+    "expected_contains": null,
+    "description": "Edge case: jintiantianqizhenbuucuo"
+  },
+  {
+    "id": 158,
+    "prefix": "",
+    "pinyin": "womenmingtianjianmianba",
+    "expected_contains": null,
+    "description": "Edge case: womenmingtianjianmianba"
+  },
+  {
+    "id": 159,
+    "prefix": "",
+    "pinyin": "er",
+    "expected_contains": null,
+    "description": "Edge case: er"
+  },
+  {
+    "id": 160,
+    "prefix": "",
+    "pinyin": "zaoshanghao",
+    "expected_contains": null,
+    "description": "Edge case: zaoshanghao"
+  },
+  {
+    "id": 161,
+    "prefix": "",
+    "pinyin": "paobu",
+    "expected_contains": null,
+    "description": "Edge case: paobu"
+  },
+  {
+    "id": 162,
+    "prefix": "",
+    "pinyin": "fense",
+    "expected_contains": null,
+    "description": "Edge case: fense"
+  },
+  {
+    "id": 163,
+    "prefix": "",
+    "pinyin": "zhegehenhaochi",
+    "expected_contains": null,
+    "description": "Edge case: zhegehenhaochi"
+  },
+  {
+    "id": 164,
+    "prefix": "",
+    "pinyin": "yi",
+    "expected_contains": null,
+    "description": "Edge case: yi"
+  },
+  {
+    "id": 165,
+    "prefix": "",
+    "pinyin": "tushuguan",
+    "expected_contains": null,
+    "description": "Edge case: tushuguan"
+  },
+  {
+    "id": 166,
+    "prefix": "",
+    "pinyin": "bai",
+    "expected_contains": null,
+    "description": "Edge case: bai"
+  },
+  {
+    "id": 167,
+    "prefix": "",
+    "pinyin": "jintian",
+    "expected_contains": null,
+    "description": "Edge case: jintian"
+  },
+  {
+    "id": 168,
+    "prefix": "",
+    "pinyin": "youyong",
+    "expected_contains": null,
+    "description": "Edge case: youyong"
+  },
+  {
+    "id": 169,
+    "prefix": "",
+    "pinyin": "lanse",
+    "expected_contains": null,
+    "description": "Edge case: lanse"
+  },
+  {
+    "id": 170,
+    "prefix": "",
+    "pinyin": "lanse",
+    "expected_contains": null,
+    "description": "Edge case: lanse"
+  },
+  {
+    "id": 171,
+    "prefix": "我们的",
+    "pinyin": "woqushangban",
+    "expected_contains": "我去上班",
+    "description": "Mixed: prefix='我们的', phrase=我去上班"
+  },
+  {
+    "id": 172,
+    "prefix": "这个是",
+    "pinyin": "heshui",
+    "expected_contains": "喝水",
+    "description": "Mixed: prefix='这个是', phrase=喝水"
+  },
+  {
+    "id": 173,
+    "prefix": "可能",
+    "pinyin": "heshui",
+    "expected_contains": "喝水",
+    "description": "Mixed: prefix='可能', phrase=喝水"
+  },
+  {
+    "id": 174,
+    "prefix": "今天",
+    "pinyin": "duibuqi",
+    "expected_contains": "对不起",
+    "description": "Mixed: prefix='今天', phrase=对不起"
+  },
+  {
+    "id": 175,
+    "prefix": "我",
+    "pinyin": "zaijian",
+    "expected_contains": "再见",
+    "description": "Mixed: prefix='我', phrase=再见"
+  },
+  {
+    "id": 176,
+    "prefix": "不要",
+    "pinyin": "meiguanxi",
+    "expected_contains": "没关系",
+    "description": "Mixed: prefix='不要', phrase=没关系"
+  },
+  {
+    "id": 177,
+    "prefix": "可以",
+    "pinyin": "woaizhongguo",
+    "expected_contains": "我爱中国",
+    "description": "Mixed: prefix='可以', phrase=我爱中国"
+  },
+  {
+    "id": 178,
+    "prefix": "可能",
+    "pinyin": "xiaban",
+    "expected_contains": "下班",
+    "description": "Mixed: prefix='可能', phrase=下班"
+  },
+  {
+    "id": 179,
+    "prefix": "",
+    "pinyin": "wan",
+    "expected_contains": "万",
+    "description": "Mixed: prefix='', phrase=万"
+  },
+  {
+    "id": 180,
+    "prefix": "我要",
+    "pinyin": "zaoshanghao",
+    "expected_contains": "早上好",
+    "description": "Mixed: prefix='我要', phrase=早上好"
+  },
+  {
+    "id": 181,
+    "prefix": "我们",
+    "pinyin": "nagebuhaokan",
+    "expected_contains": "那个不好看",
+    "description": "Mixed: prefix='我们', phrase=那个不好看"
+  },
+  {
+    "id": 182,
+    "prefix": "我要",
+    "pinyin": "woshixuesheng",
+    "expected_contains": "我是学生",
+    "description": "Mixed: prefix='我要', phrase=我是学生"
+  },
+  {
+    "id": 183,
+    "prefix": "这个是",
+    "pinyin": "zhunihaoyun",
+    "expected_contains": "祝你好运",
+    "description": "Mixed: prefix='这个是', phrase=祝你好运"
+  },
+  {
+    "id": 184,
+    "prefix": "我们",
+    "pinyin": "tushuguan",
+    "expected_contains": "图书馆",
+    "description": "Mixed: prefix='我们', phrase=图书馆"
+  },
+  {
+    "id": 185,
+    "prefix": "",
+    "pinyin": "yilupingan",
+    "expected_contains": "一路平安",
+    "description": "Mixed: prefix='', phrase=一路平安"
+  },
+  {
+    "id": 186,
+    "prefix": "我们的",
+    "pinyin": "zise",
+    "expected_contains": "紫色",
+    "description": "Mixed: prefix='我们的', phrase=紫色"
+  },
+  {
+    "id": 187,
+    "prefix": "我们",
+    "pinyin": "baise",
+    "expected_contains": "白色",
+    "description": "Mixed: prefix='我们', phrase=白色"
+  },
+  {
+    "id": 188,
+    "prefix": "非常",
+    "pinyin": "lvse",
+    "expected_contains": "绿色",
+    "description": "Mixed: prefix='非常', phrase=绿色"
+  },
+  {
+    "id": 189,
+    "prefix": "我们",
+    "pinyin": "shangban",
+    "expected_contains": "上班",
+    "description": "Mixed: prefix='我们', phrase=上班"
+  },
+  {
+    "id": 190,
+    "prefix": "明天",
+    "pinyin": "pingguo",
+    "expected_contains": "苹果",
+    "description": "Mixed: prefix='明天', phrase=苹果"
+  },
+  {
+    "id": 191,
+    "prefix": "你",
+    "pinyin": "woxiangni",
+    "expected_contains": "我想你",
+    "description": "Mixed: prefix='你', phrase=我想你"
+  },
+  {
+    "id": 192,
+    "prefix": "明天",
+    "pinyin": "honglvdeng",
+    "expected_contains": "红绿灯",
+    "description": "Mixed: prefix='明天', phrase=红绿灯"
+  },
+  {
+    "id": 193,
+    "prefix": "我",
+    "pinyin": "yeye",
+    "expected_contains": "爷爷",
+    "description": "Mixed: prefix='我', phrase=爷爷"
+  },
+  {
+    "id": 194,
+    "prefix": "这个是",
+    "pinyin": "honglvdeng",
+    "expected_contains": "红绿灯",
+    "description": "Mixed: prefix='这个是', phrase=红绿灯"
+  },
+  {
+    "id": 195,
+    "prefix": "我要",
+    "pinyin": "chifan",
+    "expected_contains": "吃饭",
+    "description": "Mixed: prefix='我要', phrase=吃饭"
+  },
+  {
+    "id": 196,
+    "prefix": "我们的",
+    "pinyin": "shentijiankang",
+    "expected_contains": "身体健康",
+    "description": "Mixed: prefix='我们的', phrase=身体健康"
+  },
+  {
+    "id": 197,
+    "prefix": "一定",
+    "pinyin": "gege",
+    "expected_contains": "哥哥",
+    "description": "Mixed: prefix='一定', phrase=哥哥"
+  },
+  {
+    "id": 198,
+    "prefix": "可能",
+    "pinyin": "pingguo",
+    "expected_contains": "苹果",
+    "description": "Mixed: prefix='可能', phrase=苹果"
+  },
+  {
+    "id": 199,
+    "prefix": "真的",
+    "pinyin": "shi",
+    "expected_contains": "十",
+    "description": "Mixed: prefix='真的', phrase=十"
+  },
+  {
+    "id": 200,
+    "prefix": "不要",
+    "pinyin": "zise",
+    "expected_contains": "紫色",
+    "description": "Mixed: prefix='不要', phrase=紫色"
+  }
+]

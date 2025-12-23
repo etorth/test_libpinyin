@@ -1,0 +1,274 @@
+[
+  {
+    "id": 1,
+    "prefix": "",
+    "pinyin": "wokanzhegezhongdadezhengzhiwentiyijingdedaoleyuanmandejiejue",
+    "expected_contains": "我看这个重大的政治问",
+    "full_sentence": "我看这个重大的政治问题已经得到了圆满的解决",
+    "description": "Long: Political statement (21 chars)"
+  },
+  {
+    "id": 2,
+    "prefix": "",
+    "pinyin": "jintiantianqifeichanghaowomenyiqiqugongyuanwanba",
+    "expected_contains": "今天天气非常好我们一",
+    "full_sentence": "今天天气非常好我们一起去公园玩吧",
+    "description": "Long: Weather and invitation (17 chars)"
+  },
+  {
+    "id": 3,
+    "prefix": "",
+    "pinyin": "tazuotianmailehenduohaochidedongxigeidajia",
+    "expected_contains": "他昨天买了很多好吃的",
+    "full_sentence": "他昨天买了很多好吃的东西给大家",
+    "description": "Long: Shopping story (16 chars)"
+  },
+  {
+    "id": 4,
+    "prefix": "",
+    "pinyin": "zheshiyigefeichangzhongyaodelishishike",
+    "expected_contains": "这是一个非常重要的历",
+    "full_sentence": "这是一个非常重要的历史时刻",
+    "description": "Long: Historical moment (14 chars)"
+  },
+  {
+    "id": 5,
+    "prefix": "",
+    "pinyin": "womenyinggairenzhengxuexikexuejishuzhishi",
+    "expected_contains": "我们应该认真学习科学",
+    "full_sentence": "我们应该认真学习科学技术知识",
+    "description": "Long: Study encouragement (15 chars)"
+  },
+  {
+    "id": 6,
+    "prefix": "",
+    "pinyin": "zhongguorenminjiefangjunshibaoweizuguodegangtichangcheng",
+    "expected_contains": "中国人民解放军是保卫",
+    "full_sentence": "中国人民解放军是保卫祖国的钢铁长城",
+    "description": "Long: Military praise (18 chars - too long)"
+  },
+  {
+    "id": 7,
+    "prefix": "",
+    "pinyin": "mingtianzaoshangbadianyaoqujichagjiemewopengyou",
+    "expected_contains": "明天早上八点我要去机",
+    "full_sentence": "明天早上八点我要去机场接我的朋友",
+    "description": "Long: Airport pickup (17 chars)"
+  },
+  {
+    "id": 8,
+    "prefix": "",
+    "pinyin": "xueshengmendouzaijiaoshilirenzhentinglaoshijiangke",
+    "expected_contains": "学生们都在教室里认真",
+    "full_sentence": "学生们都在教室里认真听老师讲课",
+    "description": "Long: Classroom scene (16 chars)"
+  },
+  {
+    "id": 9,
+    "prefix": "",
+    "pinyin": "chuntianlaile gongyuanlideuadoukaile",
+    "expected_contains": "春天来了公园里的花都",
+    "full_sentence": "春天来了公园里的花都开了",
+    "description": "Long: Spring scenery (13 chars)"
+  },
+  {
+    "id": 10,
+    "prefix": "",
+    "pinyin": "woxiwangjianglainenggouchengweiyimingyouxiudeyisheng",
+    "expected_contains": "我希望将来能够成为一",
+    "full_sentence": "我希望将来能够成为一名优秀的医生",
+    "description": "Long: Career aspiration (17 chars)"
+  },
+  {
+    "id": 11,
+    "prefix": "",
+    "pinyin": "zhebenshudenerongfeichangfengfuhenhenszhideyuedu",
+    "expected_contains": "这本书的内容非常丰富",
+    "full_sentence": "这本书的内容非常丰富很值得阅读",
+    "description": "Long: Book review (16 chars)"
+  },
+  {
+    "id": 12,
+    "prefix": "",
+    "pinyin": "qingdajiazuhuyianquanzunshoujiaotongguize",
+    "expected_contains": "请大家注意安全遵守交",
+    "full_sentence": "请大家注意安全遵守交通规则",
+    "description": "Long: Safety reminder (14 chars)"
+  },
+  {
+    "id": 13,
+    "prefix": "",
+    "pinyin": "jinniandechunjieywaohuijiahejiaretunju",
+    "expected_contains": "今年的春节我要回家和",
+    "full_sentence": "今年的春节我要回家和家人团聚",
+    "description": "Long: Spring Festival plan (15 chars)"
+  },
+  {
+    "id": 14,
+    "prefix": "",
+    "pinyin": "hulianwangjishuaibianlwomendeshenghuofangshi",
+    "expected_contains": "互联网技术改变了我们",
+    "full_sentence": "互联网技术改变了我们的生活方式",
+    "description": "Long: Internet impact (16 chars)"
+  },
+  {
+    "id": 15,
+    "prefix": "",
+    "pinyin": "baohuhuanjingshimeigeongmindzerenheuwu",
+    "expected_contains": "保护环境是每个公民的",
+    "full_sentence": "保护环境是每个公民的责任和义务",
+    "description": "Long: Environmental protection (16 chars)"
+  },
+  {
+    "id": 16,
+    "prefix": "",
+    "pinyin": "nihao",
+    "expected_contains": "你好",
+    "full_sentence": "你好",
+    "description": "Length test: 2 chars"
+  },
+  {
+    "id": 17,
+    "prefix": "",
+    "pinyin": "nihaoma",
+    "expected_contains": "你好吗",
+    "full_sentence": "你好吗",
+    "description": "Length test: 3 chars"
+  },
+  {
+    "id": 18,
+    "prefix": "",
+    "pinyin": "nihaomajintian",
+    "expected_contains": "你好吗今天",
+    "full_sentence": "你好吗今天",
+    "description": "Length test: 5 chars"
+  },
+  {
+    "id": 19,
+    "prefix": "",
+    "pinyin": "nihaomajintiantianqi",
+    "expected_contains": "你好吗今天",
+    "full_sentence": "你好吗今天天气",
+    "description": "Length test: 7 chars"
+  },
+  {
+    "id": 20,
+    "prefix": "",
+    "pinyin": "nihaomajintiantianqihenhao",
+    "expected_contains": "你好吗今天",
+    "full_sentence": "你好吗今天天气很好",
+    "description": "Length test: 9 chars"
+  },
+  {
+    "id": 21,
+    "prefix": "",
+    "pinyin": "nihaomajintiantianqihenhaowomen",
+    "expected_contains": "你好吗今天",
+    "full_sentence": "你好吗今天天气很好我们",
+    "description": "Length test: 11 chars"
+  },
+  {
+    "id": 22,
+    "prefix": "",
+    "pinyin": "nihaomajintiantianqihenhaowomenyiqi",
+    "expected_contains": "你好吗今天",
+    "full_sentence": "你好吗今天天气很好我们一起",
+    "description": "Length test: 13 chars"
+  },
+  {
+    "id": 23,
+    "prefix": "",
+    "pinyin": "nihaomajintiantianqihenhaowomenyiqiquwanr",
+    "expected_contains": "你好吗今天",
+    "full_sentence": "你好吗今天天气很好我们一起去玩",
+    "description": "Length test: 15 chars"
+  },
+  {
+    "id": 24,
+    "prefix": "",
+    "pinyin": "nihaomajintiantianqihenhaowomenyiqiquwanrba",
+    "expected_contains": "你好吗今天",
+    "full_sentence": "你好吗今天天气很好我们一起去玩儿吧",
+    "description": "Length test: 17 chars - too long"
+  },
+  {
+    "id": 25,
+    "prefix": "我觉得",
+    "pinyin": "wokanzhegezhongdadezhengzhiwentiyijingdedaoleyuanmandejiejue",
+    "expected_contains": "我看这个重大的政",
+    "full_sentence": "我看这个重大的政治问题已经得到了圆满的解决",
+    "description": "Long with prefix '我觉得': 我看这个重大的政治问..."
+  },
+  {
+    "id": 26,
+    "prefix": "大家都说",
+    "pinyin": "wokanzhegezhongdadezhengzhiwentiyijingdedaoleyuanmandejiejue",
+    "expected_contains": "我看这个重大的政",
+    "full_sentence": "我看这个重大的政治问题已经得到了圆满的解决",
+    "description": "Long with prefix '大家都说': 我看这个重大的政治问..."
+  },
+  {
+    "id": 27,
+    "prefix": "我觉得",
+    "pinyin": "jintiantianqifeichanghaowomenyiqiqugongyuanwanba",
+    "expected_contains": "今天天气非常好我",
+    "full_sentence": "今天天气非常好我们一起去公园玩吧",
+    "description": "Long with prefix '我觉得': 今天天气非常好我们一..."
+  },
+  {
+    "id": 28,
+    "prefix": "大家都说",
+    "pinyin": "jintiantianqifeichanghaowomenyiqiqugongyuanwanba",
+    "expected_contains": "今天天气非常好我",
+    "full_sentence": "今天天气非常好我们一起去公园玩吧",
+    "description": "Long with prefix '大家都说': 今天天气非常好我们一..."
+  },
+  {
+    "id": 29,
+    "prefix": "我觉得",
+    "pinyin": "tazuotianmailehenduohaochidedongxigeidajia",
+    "expected_contains": "他昨天买了很多好",
+    "full_sentence": "他昨天买了很多好吃的东西给大家",
+    "description": "Long with prefix '我觉得': 他昨天买了很多好吃的..."
+  },
+  {
+    "id": 30,
+    "prefix": "大家都说",
+    "pinyin": "tazuotianmailehenduohaochidedongxigeidajia",
+    "expected_contains": "他昨天买了很多好",
+    "full_sentence": "他昨天买了很多好吃的东西给大家",
+    "description": "Long with prefix '大家都说': 他昨天买了很多好吃的..."
+  },
+  {
+    "id": 31,
+    "prefix": "我觉得",
+    "pinyin": "zheshiyigefeichangzhongyaodelishishike",
+    "expected_contains": "这是一个非常重要",
+    "full_sentence": "这是一个非常重要的历史时刻",
+    "description": "Long with prefix '我觉得': 这是一个非常重要的历..."
+  },
+  {
+    "id": 32,
+    "prefix": "大家都说",
+    "pinyin": "zheshiyigefeichangzhongyaodelishishike",
+    "expected_contains": "这是一个非常重要",
+    "full_sentence": "这是一个非常重要的历史时刻",
+    "description": "Long with prefix '大家都说': 这是一个非常重要的历..."
+  },
+  {
+    "id": 33,
+    "prefix": "我觉得",
+    "pinyin": "womenyinggairenzhengxuexikexuejishuzhishi",
+    "expected_contains": "我们应该认真学习",
+    "full_sentence": "我们应该认真学习科学技术知识",
+    "description": "Long with prefix '我觉得': 我们应该认真学习科学..."
+  },
+  {
+    "id": 34,
+    "prefix": "大家都说",
+    "pinyin": "womenyinggairenzhengxuexikexuejishuzhishi",
+    "expected_contains": "我们应该认真学习",
+    "full_sentence": "我们应该认真学习科学技术知识",
+    "description": "Long with prefix '大家都说': 我们应该认真学习科学..."
+  }
+]

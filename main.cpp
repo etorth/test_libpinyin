@@ -27,11 +27,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <string>
+#include <vector>
 
 // Configuration constants
 const int USER_DICTIONARY_INDEX = 7;
 const int USER_PHRASE_FREQUENCY = 100;
 const bool REMEMBER_EVERY_INPUT = true;  // Match ibus-libpinyin behavior
+
+// Note: MAX_PHRASE_LENGTH (=16) is defined in novel_types.h (included by pinyin.h)
+// This means phrases can be at most 15 characters long
 
 // Read a line from stdin and remove trailing newline
 bool read_line(char** buffer, size_t* bufsize, const char* prompt)
@@ -81,12 +85,11 @@ void add_to_user_dictionary(pinyin_context_t* context, pinyin_instance_t* instan
         return;
     }
 
-    // libpinyin has a hard limit: MAX_PHRASE_LENGTH = 16
-    // Check phrase length before attempting to add
+    // Check phrase length against libpinyin's limit (MAX_PHRASE_LENGTH from novel_types.h)
     glong phrase_length = g_utf8_strlen(phrase.c_str(), -1);
-    if (phrase_length >= 16) {
-        fprintf(stdout, "Phrase '%s' too long (%ld chars, max 15). Not added to dictionary.\n",
-                phrase.c_str(), phrase_length);
+    if (phrase_length >= MAX_PHRASE_LENGTH) {
+        fprintf(stdout, "Phrase '%s' too long (%ld chars, max %d). Not added to dictionary.\n",
+                phrase.c_str(), phrase_length, MAX_PHRASE_LENGTH - 1);
         return;
     }
 

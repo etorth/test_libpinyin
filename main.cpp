@@ -38,7 +38,7 @@ const bool REMEMBER_EVERY_INPUT = true;  // Match ibus-libpinyin behavior
 // This means phrases can be at most 15 characters long
 
 // Read a line from stdin and remove trailing newline
-bool read_line(char** buffer, size_t* bufsize, const char* prompt)
+bool read_input(char** buffer, size_t* bufsize, const char* prompt)
 {
     fprintf(stdout, "%s", prompt);
     fflush(stdout);
@@ -184,7 +184,7 @@ std::pair<std::string, bool> process_pinyin_input(pinyin_instance_t* instance, c
         pinyin_guess_candidates(instance, start, sort_option);
         display_candidates(instance);
 
-        if (!read_line(buffer, bufsize, "choose:")) {
+        if (!read_input(buffer, bufsize, "choose:")) {
             break;
         }
 
@@ -307,13 +307,13 @@ int main(int argc, char* argv[])
     // Main input loop
     while (true) {
         // Read prefix (previous context)
-        if (!read_line(&prefixbuf, &prefixsize, "prefix (Chinese chars):")) {
+        if (!read_input(&prefixbuf, &prefixsize, "prefix (Chinese chars):")) {
             break;
         }
         previous_phrase = prefixbuf;
 
         // Read pinyin input
-        if (!read_line(&linebuf, &linesize, "pinyin:")) {
+        if (!read_input(&linebuf, &linesize, "pinyin:")) {
             break;
         }
 

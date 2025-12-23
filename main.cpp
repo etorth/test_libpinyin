@@ -81,6 +81,15 @@ void add_to_user_dictionary(pinyin_context_t* context, pinyin_instance_t* instan
         return;
     }
 
+    // libpinyin has a hard limit: MAX_PHRASE_LENGTH = 16
+    // Check phrase length before attempting to add
+    glong phrase_length = g_utf8_strlen(phrase.c_str(), -1);
+    if (phrase_length >= 16) {
+        fprintf(stdout, "Phrase '%s' too long (%ld chars, max 15). Not added to dictionary.\n",
+                phrase.c_str(), phrase_length);
+        return;
+    }
+
     import_iterator_t* iter = pinyin_begin_add_phrases(context, USER_DICTIONARY_INDEX);
     bool added = pinyin_iterator_add_phrase(iter, phrase.c_str(),
                                            pinyin_str.c_str(), USER_PHRASE_FREQUENCY);
@@ -180,14 +189,14 @@ std::pair<std::string, bool> process_pinyin_input(pinyin_instance_t* instance, c
         int chosen = atoi(*buffer);
         guint num = 0;
         pinyin_get_n_candidate(instance, &num);
-        
+
         if (chosen >= 0 && (guint)chosen < num) {
             lookup_candidate_t* candidate = NULL;
             pinyin_get_candidate(instance, chosen, &candidate);
-            
+
             lookup_candidate_type_t type;
             pinyin_get_candidate_type(instance, candidate, &type);
-            
+
             // LONGER or NBEST candidates selected after position 0 cause training conflicts
             // These candidates try to match from the beginning but constraints are already set
             // Skip training for these cases

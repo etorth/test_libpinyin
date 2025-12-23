@@ -134,6 +134,13 @@ bool select_candidate(pinyin_instance_t* instance, char* input_buf, size_t* star
             g_free(full_sentence);
         }
     }
+    else if (type == LONGER_CANDIDATE) {
+        // LONGER candidate - starts from position 0, covers more of input
+        // According to pinyin.cpp: choose from 0, trains uni-gram internally
+        // Do NOT call pinyin_train(instance, 0) later for LONGER candidates
+        *start_pos = pinyin_choose_candidate(instance, 0, candidate);
+        sentence = word;
+    }
     else {
         // Normal/phrase candidate - incremental selection
         sentence += word;
@@ -152,12 +159,14 @@ bool select_candidate(pinyin_instance_t* instance, char* input_buf, size_t* star
 }
 
 // Main input loop for selecting candidates
-std::string process_pinyin_input(pinyin_instance_t* instance, const char* pinyin_input, char** buffer, size_t* bufsize)
+// Returns: pair of (sentence, has_longer_candidate)
+std::pair<std::string, bool> process_pinyin_input(pinyin_instance_t* instance, const char* pinyin_input, char** buffer, size_t* bufsize)
 {
     auto sort_option = SORT_BY_PHRASE_LENGTH_AND_PINYIN_LENGTH_AND_FREQUENCY;
 
     size_t start = 0;
     std::string generated_sentence;
+    bool has_longer = false;
 
     while (start < strlen(pinyin_input)) {
         pinyin_guess_candidates(instance, start, sort_option);
@@ -165,6 +174,26 @@ std::string process_pinyin_input(pinyin_instance_t* instance, const char* pinyin
 
         if (!read_line(buffer, bufsize, "choose:")) {
             break;
+        }
+
+        // Check candidate type before selection
+        int chosen = atoi(*buffer);
+        guint num = 0;
+        pinyin_get_n_candidate(instance, &num);
+        
+        if (chosen >= 0 && (guint)chosen < num) {
+            lookup_candidate_t* candidate = NULL;
+            pinyin_get_candidate(instance, chosen, &candidate);
+            
+            lookup_candidate_type_t type;
+            pinyin_get_candidate_type(instance, candidate, &type);
+            
+            // LONGER or NBEST candidates selected after position 0 cause training conflicts
+            // These candidates try to match from the beginning but constraints are already set
+            // Skip training for these cases
+            if ((type == LONGER_CANDIDATE || type == NBEST_MATCH_CANDIDATE) && start > 0) {
+                has_longer = true;
+            }
         }
 
         if (!select_candidate(instance, *buffer, &start, generated_sentence)) {
@@ -178,25 +207,30 @@ std::string process_pinyin_input(pinyin_instance_t* instance, const char* pinyin
         }
     }
 
-    return generated_sentence;
+    return std::make_pair(generated_sentence, has_longer);
 }
 
 // Learn from user input and save to dictionary
 void learn_and_save(pinyin_context_t* context, pinyin_instance_t* instance,
                    const std::string& sentence, const std::string& pinyin_str,
-                   bool is_complete, const std::string& previous_phrase)
+                   bool is_complete, const std::string& previous_phrase,
+                   bool has_longer_candidate)
 {
     if (sentence.empty()) {
         return;
     }
 
-    // Train bigram model with user selections
-    // This is called after all candidate selections in the input loop
-    pinyin_train(instance, 0);
+    // LONGER/NBEST candidates selected after position 0 are special cases
+    // They try to re-match from beginning which conflicts with existing constraints
+    // Do NOT call train() or remember_user_input() for them
+    if (!has_longer_candidate) {
+        // Train bigram model with user selections
+        pinyin_train(instance, 0);
 
-    // Remember user input - matches ibus-libpinyin behavior
-    if (REMEMBER_EVERY_INPUT) {
-        pinyin_remember_user_input(instance, sentence.c_str(), -1);
+        // Remember user input - matches ibus-libpinyin behavior
+        if (REMEMBER_EVERY_INPUT) {
+            pinyin_remember_user_input(instance, sentence.c_str(), -1);
+        }
     }
 
     // Add complete phrases to user dictionary for direct lookup
@@ -292,10 +326,12 @@ int main(int argc, char* argv[])
         }
 
         // Process user selections
-        std::string generated_sentence = process_pinyin_input(instance, linebuf, &prefixbuf, &prefixsize);
+        auto result = process_pinyin_input(instance, linebuf, &prefixbuf, &prefixsize);
+        std::string generated_sentence = result.first;
+        bool has_longer = result.second;
 
         // Learn from selections and save (use raw input as pinyin string)
-        learn_and_save(context, instance, generated_sentence, linebuf, is_complete, previous_phrase);
+        learn_and_save(context, instance, generated_sentence, linebuf, is_complete, previous_phrase, has_longer);
 
         // Update context for next iteration
         previous_phrase = generated_sentence;

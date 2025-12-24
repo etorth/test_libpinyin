@@ -237,11 +237,7 @@ bool is_input_complete_pinyin(pinyin_instance_t* instance)
 }
 
 // Learn from user input and save to dictionary
-void train_and_save(pinyin_context_t* context, pinyin_instance_t* instance,
-                   const std::string& prefix_str,
-                   const std::string& pinyin_str,
-                   const std::string& sentence,
-                   bool has_longer_candidate)
+void train_and_save(pinyin_context_t* context, pinyin_instance_t* instance, const std::string& pinyin_str, const std::string& sentence, bool has_longer_candidate)
 {
     if (sentence.empty()) {
         return;
@@ -267,11 +263,6 @@ void train_and_save(pinyin_context_t* context, pinyin_instance_t* instance,
     }
     else {
         fprintf(stdout, "Skipped adding phrase '%s' - incomplete pinyin input\n", sentence.c_str());
-    }
-
-    // Log what we're learning
-    if (!prefix_str.empty()) {
-        fprintf(stdout, "Learning: '%s' → '%s'\n", prefix_str.c_str(), sentence.c_str());
     }
 
     // Save to persistent storage
@@ -307,16 +298,6 @@ int main(int argc, char* argv[])
 
     // Main input loop
     while (true) {
-        // Read prefix (previous context)
-        std::string prefix_input;
-        if (!read_input("prefix (Chinese chars):", prefix_input)) {
-            break;
-        }
-
-        if (prefix_input == "quit") {
-            break;
-        }
-
         // Read pinyin input
         std::string pinyin_input;
         if (!read_input("pinyin:", pinyin_input)) {
@@ -337,7 +318,7 @@ int main(int argc, char* argv[])
         bool has_longer = result.second;
 
         // Learn from selections and save (use raw input as pinyin string)
-        train_and_save(context, instance, prefix_input, pinyin_input, generated_sentence, has_longer);
+        train_and_save(context, instance, pinyin_input, generated_sentence, has_longer);
 
         // Reset instance for next input
         pinyin_reset(instance);

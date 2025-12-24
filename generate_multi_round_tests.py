@@ -1,0 +1,175 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Generate test cases for multi-round pinyin input testing.
+Each test case contains multiple rounds of pinyin input to test
+that the program can handle continuous input without restarting.
+"""
+
+import json
+
+# Test cases with multiple rounds
+test_cases = [
+    {
+        "description": "Basic two-round test",
+        "rounds": [
+            {
+                "pinyin": "nihao",
+                "expected": "你好",
+                "selections": [{"offset": 0, "choice_index": 0}]
+            },
+            {
+                "pinyin": "zaijian",
+                "expected": "再见",
+                "selections": [{"offset": 0, "choice_index": 0}]
+            }
+        ]
+    },
+    {
+        "description": "Three rounds with different phrases",
+        "rounds": [
+            {
+                "pinyin": "zhongguo",
+                "expected": "中国",
+                "selections": [{"offset": 0, "choice_index": 0}]
+            },
+            {
+                "pinyin": "meiguo",
+                "expected": "美国",
+                "selections": [{"offset": 0, "choice_index": 0}]
+            },
+            {
+                "pinyin": "riben",
+                "expected": "日本",
+                "selections": [{"offset": 0, "choice_index": 0}]
+            }
+        ]
+    },
+    {
+        "description": "Multi-selection in multiple rounds",
+        "rounds": [
+            {
+                "pinyin": "woaichifan",
+                "expected": "我爱吃饭",
+                "selections": [{"offset": 0, "choice_index": 0}]
+            },
+            {
+                "pinyin": "tahexishui",
+                "expected": "她喝汽水",
+                "selections": [{"offset": 0, "choice_index": 0}]
+            }
+        ]
+    },
+    {
+        "description": "Learning effect across rounds",
+        "rounds": [
+            {
+                "pinyin": "nidaye",
+                "expected": "你大爷",
+                "selections": [{"offset": 0, "choice_index": 0}]
+            },
+            {
+                "pinyin": "nidaye",
+                "expected": "你大爷",
+                "selections": [{"offset": 0, "choice_index": 0}]
+            }
+        ]
+    },
+    {
+        "description": "Five rounds mixed content",
+        "rounds": [
+            {
+                "pinyin": "beijing",
+                "expected": "北京",
+                "selections": [{"offset": 0, "choice_index": 0}]
+            },
+            {
+                "pinyin": "shanghai",
+                "expected": "上海",
+                "selections": [{"offset": 0, "choice_index": 0}]
+            },
+            {
+                "pinyin": "guangzhou",
+                "expected": "广州",
+                "selections": [{"offset": 0, "choice_index": 0}]
+            },
+            {
+                "pinyin": "shenzhen",
+                "expected": "深圳",
+                "selections": [{"offset": 0, "choice_index": 0}]
+            },
+            {
+                "pinyin": "chengdu",
+                "expected": "成都",
+                "selections": [{"offset": 0, "choice_index": 0}]
+            }
+        ]
+    },
+    {
+        "description": "Complex multi-selection patterns",
+        "rounds": [
+            {
+                "pinyin": "wokanzhegeshijieshimeiyangde",
+                "expected": "我看这个世界是美好的",
+                "selections": [{"offset": 0, "choice_index": 0}]
+            },
+            {
+                "pinyin": "tamenzuijinzenmeyang",
+                "expected": "他们最近怎么样",
+                "selections": [{"offset": 0, "choice_index": 0}]
+            },
+            {
+                "pinyin": "womenyiqiyoudongxi",
+                "expected": "我们一起游东西",
+                "selections": [{"offset": 0, "choice_index": 0}]
+            }
+        ]
+    },
+    {
+        "description": "Alternating short and long inputs",
+        "rounds": [
+            {
+                "pinyin": "ni",
+                "expected": "你",
+                "selections": [{"offset": 0, "choice_index": 0}]
+            },
+            {
+                "pinyin": "womenyaojianchixuexi",
+                "expected": "我们要坚持学习",
+                "selections": [{"offset": 0, "choice_index": 0}]
+            },
+            {
+                "pinyin": "hao",
+                "expected": "好",
+                "selections": [{"offset": 0, "choice_index": 0}]
+            }
+        ]
+    },
+    {
+        "description": "Repeated phrase learning",
+        "rounds": [
+            {
+                "pinyin": "heanhong",
+                "expected": "何岸泓",
+                "selections": [{"offset": 0, "choice_index": 0}]
+            },
+            {
+                "pinyin": "heanhong",
+                "expected": "何岸泓",
+                "selections": [{"offset": 0, "choice_index": 0}]
+            },
+            {
+                "pinyin": "heanhong",
+                "expected": "何岸泓",
+                "selections": [{"offset": 0, "choice_index": 0}]
+            }
+        ]
+    }
+]
+
+if __name__ == "__main__":
+    output_file = "multi_round_tests.json"
+    with open(output_file, 'w', encoding='utf-8') as f:
+        json.dump(test_cases, f, ensure_ascii=False, indent=2)
+    print(f"Generated {len(test_cases)} multi-round test cases")
+    print(f"Saved to {output_file}")

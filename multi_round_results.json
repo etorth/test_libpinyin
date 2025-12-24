@@ -1,0 +1,155 @@
+[
+  {
+    "test_number": 1,
+    "description": "Basic two-round test",
+    "passed": true,
+    "rounds": [
+      {
+        "round": 1,
+        "passed": true
+      },
+      {
+        "round": 2,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "test_number": 2,
+    "description": "Three rounds with different phrases",
+    "passed": true,
+    "rounds": [
+      {
+        "round": 1,
+        "passed": true
+      },
+      {
+        "round": 2,
+        "passed": true
+      },
+      {
+        "round": 3,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "test_number": 3,
+    "description": "Multi-selection in multiple rounds",
+    "passed": false,
+    "rounds": [
+      {
+        "round": 1,
+        "passed": true
+      },
+      {
+        "round": 2,
+        "passed": false,
+        "expected": "她喝汽水",
+        "actual": "塔河习水"
+      }
+    ]
+  },
+  {
+    "test_number": 4,
+    "description": "Learning effect across rounds",
+    "passed": false,
+    "rounds": [
+      {
+        "round": 1,
+        "passed": false,
+        "expected": "你大爷",
+        "actual": "你大业"
+      },
+      {
+        "round": 2,
+        "passed": false,
+        "expected": "你大爷",
+        "actual": "你大业"
+      }
+    ]
+  },
+  {
+    "test_number": 5,
+    "description": "Five rounds mixed content",
+    "passed": false,
+    "rounds": [
+      {
+        "round": 1,
+        "passed": true
+      },
+      {
+        "round": 2,
+        "passed": true
+      },
+      {
+        "round": 3,
+        "passed": true
+      },
+      {
+        "round": 4,
+        "passed": true
+      },
+      {
+        "round": 5,
+        "passed": false,
+        "expected": "成都",
+        "actual": "程度"
+      }
+    ]
+  },
+  {
+    "test_number": 6,
+    "description": "Complex multi-selection patterns",
+    "passed": false,
+    "rounds": [
+      {
+        "error": "Not enough sentences: 2/3"
+      }
+    ]
+  },
+  {
+    "test_number": 7,
+    "description": "Alternating short and long inputs",
+    "passed": true,
+    "rounds": [
+      {
+        "round": 1,
+        "passed": true
+      },
+      {
+        "round": 2,
+        "passed": true
+      },
+      {
+        "round": 3,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "test_number": 8,
+    "description": "Repeated phrase learning",
+    "passed": false,
+    "rounds": [
+      {
+        "round": 1,
+        "passed": false,
+        "expected": "何岸泓",
+        "actual": "河岸红"
+      },
+      {
+        "round": 2,
+        "passed": false,
+        "expected": "何岸泓",
+        "actual": "河岸红"
+      },
+      {
+        "round": 3,
+        "passed": false,
+        "expected": "何岸泓",
+        "actual": "河岸红"
+      }
+    ]
+  }
+]

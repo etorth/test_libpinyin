@@ -238,7 +238,7 @@ bool is_input_complete_pinyin(pinyin_instance_t* instance)
 
 // Learn from user input and save to dictionary
 void train_and_save(pinyin_context_t* context, pinyin_instance_t* instance,
-                   const std::string& previous_phrase,
+                   const std::string& prefix_str,
                    const std::string& pinyin_str,
                    const std::string& sentence,
                    bool has_longer_candidate)
@@ -270,8 +270,8 @@ void train_and_save(pinyin_context_t* context, pinyin_instance_t* instance,
     }
 
     // Log what we're learning
-    if (!previous_phrase.empty()) {
-        fprintf(stdout, "Learning: '%s' → '%s'\n", previous_phrase.c_str(), sentence.c_str());
+    if (!prefix_str.empty()) {
+        fprintf(stdout, "Learning: '%s' → '%s'\n", prefix_str.c_str(), sentence.c_str());
     }
 
     // Save to persistent storage
@@ -305,9 +305,6 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    // Context for bigram learning
-    std::string previous_phrase;
-
     // Main input loop
     while (true) {
         // Read prefix (previous context)
@@ -319,8 +316,6 @@ int main(int argc, char* argv[])
         if (prefix_input == "quit") {
             break;
         }
-
-        previous_phrase = prefix_input;
 
         // Read pinyin input
         std::string pinyin_input;
@@ -342,10 +337,7 @@ int main(int argc, char* argv[])
         bool has_longer = result.second;
 
         // Learn from selections and save (use raw input as pinyin string)
-        train_and_save(context, instance, previous_phrase, pinyin_input, generated_sentence, has_longer);
-
-        // Update context for next iteration
-        previous_phrase = generated_sentence;
+        train_and_save(context, instance, prefix_input, pinyin_input, generated_sentence, has_longer);
 
         // Reset instance for next input
         pinyin_reset(instance);

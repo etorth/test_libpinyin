@@ -176,23 +176,24 @@ bool select_candidate(pinyin_instance_t* instance, int chosen, size_t* start_pos
 // Returns: pair of (sentence, has_longer_candidate)
 std::pair<std::string, bool> process_pinyin_input(pinyin_instance_t* instance, const std::string &pinyin_input)
 {
-    auto sort_option = SORT_BY_PHRASE_LENGTH_AND_PINYIN_LENGTH_AND_FREQUENCY;
+    const auto sort_option = SORT_BY_PHRASE_LENGTH_AND_PINYIN_LENGTH_AND_FREQUENCY;
 
     size_t start = 0;
-    std::string generated_sentence;
     bool has_longer = false;
+    std::string generated_sentence;
 
     while (start < pinyin_input.size()) {
         pinyin_guess_candidates(instance, start, sort_option);
         display_candidates(instance);
 
-        std::string input_str;
-        if (!read_input("choose:", input_str)) {
+        std::string chosen_str;
+        if (!read_input("choose:", chosen_str)) {
             break;
         }
 
         // Check candidate type before selection
-        int chosen = std::stoi(input_str);
+        int chosen = std::stoi(chosen_str);
+
         guint num = 0;
         pinyin_get_n_candidate(instance, &num);
 
@@ -227,8 +228,10 @@ std::pair<std::string, bool> process_pinyin_input(pinyin_instance_t* instance, c
 
 // Learn from user input and save to dictionary
 void learn_and_save(pinyin_context_t* context, pinyin_instance_t* instance,
-                   const std::string& sentence, const std::string& pinyin_str,
-                   bool is_complete, const std::string& previous_phrase,
+                   const std::string& previous_phrase,
+                   const std::string& pinyin_str,
+                   const std::string& sentence,
+                   bool is_complete,
                    bool has_longer_candidate)
 {
     if (sentence.empty()) {
@@ -346,7 +349,7 @@ int main(int argc, char* argv[])
         bool has_longer = result.second;
 
         // Learn from selections and save (use raw input as pinyin string)
-        learn_and_save(context, instance, generated_sentence, pinyin_input, is_complete, previous_phrase, has_longer);
+        learn_and_save(context, instance, previous_phrase, pinyin_input, generated_sentence, is_complete, has_longer);
 
         // Update context for next iteration
         previous_phrase = generated_sentence;

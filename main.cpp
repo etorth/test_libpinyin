@@ -222,12 +222,25 @@ std::pair<std::string, bool> process_pinyin_input(pinyin_instance_t* instance, c
     return std::make_pair(generated_sentence, has_longer);
 }
 
+bool is_input_complete_pinyin(pinyin_instance_t* instance)
+{
+    size_t n_pinyin = pinyin_get_parsed_input_length(instance);
+    for (size_t i = 0; i < n_pinyin; ++i) {
+        ChewingKey* key = NULL;
+        if (pinyin_get_pinyin_key(instance, i, &key) && key) {
+            if (pinyin_get_pinyin_is_incomplete(instance, key)) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 // Learn from user input and save to dictionary
 void learn_and_save(pinyin_context_t* context, pinyin_instance_t* instance,
                    const std::string& previous_phrase,
                    const std::string& pinyin_str,
                    const std::string& sentence,
-                   bool is_complete,
                    bool has_longer_candidate)
 {
     if (sentence.empty()) {
@@ -248,7 +261,8 @@ void learn_and_save(pinyin_context_t* context, pinyin_instance_t* instance,
     }
 
     // Add complete phrases to user dictionary for direct lookup
-    if (is_complete) {
+    // Check if input is complete pinyin (before selections modify state)
+    if (is_input_complete_pinyin(instance)) {
         add_to_user_dictionary(context, sentence, pinyin_str);
     }
     else {
@@ -262,20 +276,6 @@ void learn_and_save(pinyin_context_t* context, pinyin_instance_t* instance,
 
     // Save to persistent storage
     pinyin_save(context);
-}
-
-bool is_input_complete_pinyin(pinyin_instance_t* instance)
-{
-    size_t n_pinyin = pinyin_get_parsed_input_length(instance);
-    for (size_t i = 0; i < n_pinyin; ++i) {
-        ChewingKey* key = NULL;
-        if (pinyin_get_pinyin_key(instance, i, &key) && key) {
-            if (pinyin_get_pinyin_is_incomplete(instance, key)) {
-                return false;
-            }
-        }
-    }
-    return true;
 }
 
 int main(int argc, char* argv[])
@@ -335,9 +335,6 @@ int main(int argc, char* argv[])
         // Parse pinyin input
         pinyin_parse_more_full_pinyins(instance, pinyin_input.c_str());
 
-        // Check if input is complete pinyin (before selections modify state)
-        bool is_complete = is_input_complete_pinyin(instance);
-
         // Process user selections
         auto result = process_pinyin_input(instance, pinyin_input);
 
@@ -345,7 +342,7 @@ int main(int argc, char* argv[])
         bool has_longer = result.second;
 
         // Learn from selections and save (use raw input as pinyin string)
-        learn_and_save(context, instance, previous_phrase, pinyin_input, generated_sentence, is_complete, has_longer);
+        learn_and_save(context, instance, previous_phrase, pinyin_input, generated_sentence, has_longer);
 
         // Update context for next iteration
         previous_phrase = generated_sentence;

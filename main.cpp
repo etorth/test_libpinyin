@@ -82,8 +82,7 @@ void display_candidates(pinyin_instance_t* instance)
 }
 
 // Add phrase to user dictionary
-void add_to_user_dictionary(pinyin_context_t* context, pinyin_instance_t* instance,
-                            const std::string& phrase, const std::string& pinyin_str)
+void add_to_user_dictionary(pinyin_context_t* context, const std::string& phrase, const std::string& pinyin_str)
 {
     if (phrase.empty() || pinyin_str.empty()) {
         return;
@@ -92,18 +91,15 @@ void add_to_user_dictionary(pinyin_context_t* context, pinyin_instance_t* instan
     // Check phrase length against libpinyin's limit (MAX_PHRASE_LENGTH from novel_types.h)
     glong phrase_length = g_utf8_strlen(phrase.c_str(), -1);
     if (phrase_length >= MAX_PHRASE_LENGTH) {
-        fprintf(stdout, "Phrase '%s' too long (%ld chars, max %d). Not added to dictionary.\n",
-                phrase.c_str(), phrase_length, MAX_PHRASE_LENGTH - 1);
+        fprintf(stdout, "Phrase '%s' too long (%ld chars, max %d). Not added to dictionary.\n", phrase.c_str(), phrase_length, MAX_PHRASE_LENGTH - 1);
         return;
     }
 
     import_iterator_t* iter = pinyin_begin_add_phrases(context, USER_DICTIONARY_INDEX);
-    bool added = pinyin_iterator_add_phrase(iter, phrase.c_str(),
-                                           pinyin_str.c_str(), USER_PHRASE_FREQUENCY);
+    bool added = pinyin_iterator_add_phrase(iter, phrase.c_str(), pinyin_str.c_str(), USER_PHRASE_FREQUENCY);
     pinyin_end_add_phrases(iter);
 
-    fprintf(stdout, "Added phrase '%s' (pinyin: %s): %s\n",
-            phrase.c_str(), pinyin_str.c_str(), added ? "success" : "failed");
+    fprintf(stdout, "Added phrase '%s' (pinyin: %s): %s\n", phrase.c_str(), pinyin_str.c_str(), added ? "success" : "failed");
 }
 
 // Process one candidate selection step
@@ -253,7 +249,7 @@ void learn_and_save(pinyin_context_t* context, pinyin_instance_t* instance,
 
     // Add complete phrases to user dictionary for direct lookup
     if (is_complete) {
-        add_to_user_dictionary(context, instance, sentence, pinyin_str);
+        add_to_user_dictionary(context, sentence, pinyin_str);
     }
     else {
         fprintf(stdout, "Skipped adding phrase '%s' - incomplete pinyin input\n", sentence.c_str());

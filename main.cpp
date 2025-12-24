@@ -38,21 +38,25 @@ const bool REMEMBER_EVERY_INPUT = true;  // Match ibus-libpinyin behavior
 // This means phrases can be at most 15 characters long
 
 // Read a line from stdin and remove trailing newline
-bool read_input(char** buffer, size_t* bufsize, const char* prompt)
+bool read_input(const char* prompt, std::string &input)
 {
     fprintf(stdout, "%s", prompt);
     fflush(stdout);
 
-    ssize_t read = getline(buffer, bufsize, stdin);
+    char *buffer = nullptr;
+    size_t bufsize = 0;
+
+    ssize_t read = getline(&buffer, &bufsize, stdin);
     if (read == -1) {
         return false;
     }
 
-    size_t len = strlen(*buffer);
-    if (len > 0 && (*buffer)[len - 1] == '\n') {
-        (*buffer)[len - 1] = '\0';
-    }
+    input = buffer;
+    free(buffer);
 
+    if(!input.empty() && input.back() == '\n') {
+        input.pop_back();
+    }
     return true;
 }
 
@@ -103,10 +107,8 @@ void add_to_user_dictionary(pinyin_context_t* context, pinyin_instance_t* instan
 }
 
 // Process one candidate selection step
-bool select_candidate(pinyin_instance_t* instance, char* input_buf, size_t* start_pos, std::string& sentence)
+bool select_candidate(pinyin_instance_t* instance, int chosen, size_t* start_pos, std::string& sentence)
 {
-    int chosen = atoi(input_buf);
-
     // Validate candidate index
     guint num = 0;
     pinyin_get_n_candidate(instance, &num);
@@ -172,7 +174,7 @@ bool select_candidate(pinyin_instance_t* instance, char* input_buf, size_t* star
 
 // Main input loop for selecting candidates
 // Returns: pair of (sentence, has_longer_candidate)
-std::pair<std::string, bool> process_pinyin_input(pinyin_instance_t* instance, const char* pinyin_input, char** buffer, size_t* bufsize)
+std::pair<std::string, bool> process_pinyin_input(pinyin_instance_t* instance, const std::string &pinyin_input)
 {
     auto sort_option = SORT_BY_PHRASE_LENGTH_AND_PINYIN_LENGTH_AND_FREQUENCY;
 
@@ -180,16 +182,17 @@ std::pair<std::string, bool> process_pinyin_input(pinyin_instance_t* instance, c
     std::string generated_sentence;
     bool has_longer = false;
 
-    while (start < strlen(pinyin_input)) {
+    while (start < pinyin_input.size()) {
         pinyin_guess_candidates(instance, start, sort_option);
         display_candidates(instance);
 
-        if (!read_input(buffer, bufsize, "choose:")) {
+        std::string input_str;
+        if (!read_input("choose:", input_str)) {
             break;
         }
 
         // Check candidate type before selection
-        int chosen = atoi(*buffer);
+        int chosen = std::stoi(input_str);
         guint num = 0;
         pinyin_get_n_candidate(instance, &num);
 
@@ -208,13 +211,13 @@ std::pair<std::string, bool> process_pinyin_input(pinyin_instance_t* instance, c
             }
         }
 
-        if (!select_candidate(instance, *buffer, &start, generated_sentence)) {
+        if (!select_candidate(instance, chosen, &start, generated_sentence)) {
             // Invalid selection, skip and continue
             continue;
         }
 
         // If NBEST candidate was selected, we're done
-        if (start >= strlen(pinyin_input)) {
+        if (start >= pinyin_input.size()) {
             break;
         }
     }
@@ -248,33 +251,42 @@ void learn_and_save(pinyin_context_t* context, pinyin_instance_t* instance,
     // Add complete phrases to user dictionary for direct lookup
     if (is_complete) {
         add_to_user_dictionary(context, instance, sentence, pinyin_str);
-    } else {
-        fprintf(stdout, "Skipped adding phrase '%s' - incomplete pinyin input\n",
-                sentence.c_str());
+    }
+    else {
+        fprintf(stdout, "Skipped adding phrase '%s' - incomplete pinyin input\n", sentence.c_str());
     }
 
     // Log what we're learning
     if (!previous_phrase.empty()) {
-        fprintf(stdout, "Learning: '%s' → '%s'\n",
-                previous_phrase.c_str(), sentence.c_str());
+        fprintf(stdout, "Learning: '%s' → '%s'\n", previous_phrase.c_str(), sentence.c_str());
     }
 
     // Save to persistent storage
     pinyin_save(context);
 }
 
+bool is_input_complete_pinyin(pinyin_instance_t* instance)
+{
+    size_t n_pinyin = pinyin_get_parsed_input_length(instance);
+    for (size_t i = 0; i < n_pinyin; ++i) {
+        ChewingKey* key = NULL;
+        if (pinyin_get_pinyin_key(instance, i, &key) && key) {
+            if (pinyin_get_pinyin_is_incomplete(instance, key)) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 int main(int argc, char* argv[])
 {
     // Create user.conf if it doesn't exist to avoid warning message
-    FILE* check_file = fopen("data/user.conf", "r");
-    if (!check_file) {
-        FILE* create_file = fopen("data/user.conf", "w");
-        if (create_file) {
-            fclose(create_file);
-        }
-    }
-    else {
+    if(FILE* check_file = fopen("data/user.conf", "r")){
         fclose(check_file);
+    }
+    else if(FILE* create_file = fopen("data/user.conf", "w")){
+        fclose(create_file);
     }
 
     // Initialize libpinyin
@@ -284,8 +296,7 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    pinyin_option_t options = PINYIN_INCOMPLETE | PINYIN_CORRECT_ALL |
-                             USE_DIVIDED_TABLE | USE_RESPLIT_TABLE | DYNAMIC_ADJUST;
+    pinyin_option_t options = PINYIN_INCOMPLETE | PINYIN_CORRECT_ALL | USE_DIVIDED_TABLE | USE_RESPLIT_TABLE | DYNAMIC_ADJUST;
     pinyin_set_options(context, options);
 
     pinyin_instance_t* instance = pinyin_alloc_instance(context);
@@ -295,55 +306,47 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    // Input buffers
-    char* prefixbuf = NULL;
-    size_t prefixsize = 0;
-    char* linebuf = NULL;
-    size_t linesize = 0;
-
     // Context for bigram learning
     std::string previous_phrase;
 
     // Main input loop
     while (true) {
         // Read prefix (previous context)
-        if (!read_input(&prefixbuf, &prefixsize, "prefix (Chinese chars):")) {
+        std::string prefix_input;
+        if (!read_input("prefix (Chinese chars):", prefix_input)) {
             break;
         }
-        previous_phrase = prefixbuf;
+
+        if (prefix_input == "quit") {
+            break;
+        }
+
+        previous_phrase = prefix_input;
 
         // Read pinyin input
-        if (!read_input(&linebuf, &linesize, "pinyin:")) {
+        std::string pinyin_input;
+        if (!read_input("pinyin:", pinyin_input)) {
             break;
         }
 
-        if (strcmp(linebuf, "quit") == 0) {
+        if (pinyin_input == "quit") {
             break;
         }
 
         // Parse pinyin input
-        pinyin_parse_more_full_pinyins(instance, linebuf);
+        pinyin_parse_more_full_pinyins(instance, pinyin_input.c_str());
 
         // Check if input is complete pinyin (before selections modify state)
-        bool is_complete = true;
-        size_t n_pinyin = pinyin_get_parsed_input_length(instance);
-        for (size_t i = 0; i < n_pinyin; ++i) {
-            ChewingKey* key = NULL;
-            if (pinyin_get_pinyin_key(instance, i, &key) && key) {
-                if (pinyin_get_pinyin_is_incomplete(instance, key)) {
-                    is_complete = false;
-                    break;
-                }
-            }
-        }
+        bool is_complete = is_input_complete_pinyin(instance);
 
         // Process user selections
-        auto result = process_pinyin_input(instance, linebuf, &prefixbuf, &prefixsize);
+        auto result = process_pinyin_input(instance, pinyin_input);
+
         std::string generated_sentence = result.first;
         bool has_longer = result.second;
 
         // Learn from selections and save (use raw input as pinyin string)
-        learn_and_save(context, instance, generated_sentence, linebuf, is_complete, previous_phrase, has_longer);
+        learn_and_save(context, instance, generated_sentence, pinyin_input, is_complete, previous_phrase, has_longer);
 
         // Update context for next iteration
         previous_phrase = generated_sentence;
@@ -360,7 +363,5 @@ int main(int argc, char* argv[])
     pinyin_save(context);
     pinyin_fini(context);
 
-    free(prefixbuf);
-    free(linebuf);
     return 0;
 }

@@ -237,7 +237,7 @@ bool is_input_complete_pinyin(pinyin_instance_t* instance)
 }
 
 // Learn from user input and save to dictionary
-void learn_and_save(pinyin_context_t* context, pinyin_instance_t* instance,
+void train_and_save(pinyin_context_t* context, pinyin_instance_t* instance,
                    const std::string& previous_phrase,
                    const std::string& pinyin_str,
                    const std::string& sentence,
@@ -342,7 +342,7 @@ int main(int argc, char* argv[])
         bool has_longer = result.second;
 
         // Learn from selections and save (use raw input as pinyin string)
-        learn_and_save(context, instance, previous_phrase, pinyin_input, generated_sentence, has_longer);
+        train_and_save(context, instance, previous_phrase, pinyin_input, generated_sentence, has_longer);
 
         // Update context for next iteration
         previous_phrase = generated_sentence;

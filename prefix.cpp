@@ -29,6 +29,14 @@
 #include <string.h>
 
 int main(int argc, char * argv[]){
+    // Create user.conf if it doesn't exist to avoid warning message
+    if(FILE* check_file = fopen("data/user.conf", "r")){
+        fclose(check_file);
+    }
+    else if(FILE* create_file = fopen("data/user.conf", "w")){
+        fclose(create_file);
+    }
+
     pinyin_context_t * context =
         pinyin_init("data", "data");
 

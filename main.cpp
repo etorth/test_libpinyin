@@ -33,9 +33,6 @@ const int USER_DICTIONARY_INDEX = 7;
 const int USER_PHRASE_FREQUENCY = 100;
 const bool REMEMBER_EVERY_INPUT = true;  // Match ibus-libpinyin behavior
 
-// Note: MAX_PHRASE_LENGTH (=16) is defined in novel_types.h (included by pinyin.h)
-// This means phrases can be at most 15 characters long
-
 bool read_stdin(const char* prompt, std::string &input)
 {
     fprintf(stdout, "%s", prompt);

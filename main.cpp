@@ -292,6 +292,7 @@ int main(int argc, char* argv[])
 
         if(!read_stdin("pinyin:", pinyin_input)) break;
         if(pinyin_input == "quit") break;
+        if(pinyin_input.empty()) continue;
 
         pinyin_parse_more_full_pinyins(instance, pinyin_input.c_str());
 

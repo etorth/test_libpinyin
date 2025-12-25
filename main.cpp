@@ -60,7 +60,7 @@ void display_candidates(pinyin_instance_t* instance, size_t max)
     guint num = 0;
     pinyin_get_n_candidate(instance, &num);
 
-    for(size_t i = 0; i < std::max<size_t>(num, max); ++i){
+    for(size_t i = 0; i < std::min<size_t>(num, max); ++i){
         lookup_candidate_t* candidate = nullptr;
         pinyin_get_candidate(instance, i, &candidate);
 
@@ -165,9 +165,13 @@ std::pair<std::string, bool> process_pinyin_input(pinyin_instance_t* instance, c
     bool skip_train = false;
     std::string generated_sentence;
 
+    // if(!prefix_input.empty()){
+    //     pinyin_guess_sentence_with_prefix(instance, prefix_input.c_str());
+    // }
+
     for(size_t start = 0; start < pinyin_input.size();){
         pinyin_guess_candidates(instance, start, SORT_BY_PHRASE_LENGTH_AND_PINYIN_LENGTH_AND_FREQUENCY);
-        display_candidates(instance, 20); // print first 20 candidates
+        display_candidates(instance, 40); // print first 40 candidates
 
         std::string chosen_str;
         if(!read_stdin("choose:", chosen_str)){

@@ -1,175 +1,75 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Generate test cases for multi-round pinyin input testing.
-Each test case contains multiple rounds of pinyin input to test
-that the program can handle continuous input without restarting.
-"""
-
 import json
 
-# Test cases with multiple rounds
+# Test cases with prefix that should be run multiple times to verify robustness
 test_cases = [
     {
-        "description": "Basic two-round test",
+        "description": "我是 + niba -> 你爸 (repeated 3 times)",
         "rounds": [
-            {
-                "pinyin": "nihao",
-                "expected": "你好",
-                "selections": [{"offset": 0, "choice_index": 0}]
-            },
-            {
-                "pinyin": "zaijian",
-                "expected": "再见",
-                "selections": [{"offset": 0, "choice_index": 0}]
-            }
+            {"prefix": "我是", "pinyin": "niba", "expected": "你爸"},
+            {"prefix": "我是", "pinyin": "niba", "expected": "你爸"},
+            {"prefix": "我是", "pinyin": "niba", "expected": "你爸"}
         ]
     },
     {
-        "description": "Three rounds with different phrases",
+        "description": "我吃 + niba -> 泥巴 (repeated 3 times)",
         "rounds": [
-            {
-                "pinyin": "zhongguo",
-                "expected": "中国",
-                "selections": [{"offset": 0, "choice_index": 0}]
-            },
-            {
-                "pinyin": "meiguo",
-                "expected": "美国",
-                "selections": [{"offset": 0, "choice_index": 0}]
-            },
-            {
-                "pinyin": "riben",
-                "expected": "日本",
-                "selections": [{"offset": 0, "choice_index": 0}]
-            }
+            {"prefix": "我吃", "pinyin": "niba", "expected": "泥巴"},
+            {"prefix": "我吃", "pinyin": "niba", "expected": "泥巴"},
+            {"prefix": "我吃", "pinyin": "niba", "expected": "泥巴"}
         ]
     },
     {
-        "description": "Multi-selection in multiple rounds",
+        "description": "Mixed: 我是你爸 then 我吃泥巴 alternating",
         "rounds": [
-            {
-                "pinyin": "woaichifan",
-                "expected": "我爱吃饭",
-                "selections": [{"offset": 0, "choice_index": 0}]
-            },
-            {
-                "pinyin": "tahexishui",
-                "expected": "她喝汽水",
-                "selections": [{"offset": 0, "choice_index": 0}]
-            }
+            {"prefix": "我是", "pinyin": "niba", "expected": "你爸"},
+            {"prefix": "我吃", "pinyin": "niba", "expected": "泥巴"},
+            {"prefix": "我是", "pinyin": "niba", "expected": "你爸"},
+            {"prefix": "我吃", "pinyin": "niba", "expected": "泥巴"}
         ]
     },
     {
-        "description": "Learning effect across rounds",
+        "description": "Empty prefix + niba (repeated)",
         "rounds": [
-            {
-                "pinyin": "nidaye",
-                "expected": "你大爷",
-                "selections": [{"offset": 0, "choice_index": 0}]
-            },
-            {
-                "pinyin": "nidaye",
-                "expected": "你大爷",
-                "selections": [{"offset": 0, "choice_index": 0}]
-            }
+            {"prefix": "", "pinyin": "niba", "expected": "泥巴"},
+            {"prefix": "", "pinyin": "niba", "expected": "泥巴"}
         ]
     },
     {
-        "description": "Five rounds mixed content",
+        "description": "长江 + daqiao -> 大桥 (repeated)",
         "rounds": [
-            {
-                "pinyin": "beijing",
-                "expected": "北京",
-                "selections": [{"offset": 0, "choice_index": 0}]
-            },
-            {
-                "pinyin": "shanghai",
-                "expected": "上海",
-                "selections": [{"offset": 0, "choice_index": 0}]
-            },
-            {
-                "pinyin": "guangzhou",
-                "expected": "广州",
-                "selections": [{"offset": 0, "choice_index": 0}]
-            },
-            {
-                "pinyin": "shenzhen",
-                "expected": "深圳",
-                "selections": [{"offset": 0, "choice_index": 0}]
-            },
-            {
-                "pinyin": "chengdu",
-                "expected": "成都",
-                "selections": [{"offset": 0, "choice_index": 0}]
-            }
+            {"prefix": "长江", "pinyin": "daqiao", "expected": "大桥"},
+            {"prefix": "长江", "pinyin": "daqiao", "expected": "大桥"},
+            {"prefix": "长江", "pinyin": "daqiao", "expected": "大桥"}
         ]
     },
     {
-        "description": "Complex multi-selection patterns",
+        "description": "三国 + daqiao -> 大乔 (repeated)",
         "rounds": [
-            {
-                "pinyin": "wokanzhegeshijieshimeiyangde",
-                "expected": "我看这个世界是美好的",
-                "selections": [{"offset": 0, "choice_index": 0}]
-            },
-            {
-                "pinyin": "tamenzuijinzenmeyang",
-                "expected": "他们最近怎么样",
-                "selections": [{"offset": 0, "choice_index": 0}]
-            },
-            {
-                "pinyin": "womenyiqiyoudongxi",
-                "expected": "我们一起游东西",
-                "selections": [{"offset": 0, "choice_index": 0}]
-            }
+            {"prefix": "三国", "pinyin": "daqiao", "expected": "大乔"},
+            {"prefix": "三国", "pinyin": "daqiao", "expected": "大乔"}
         ]
     },
     {
-        "description": "Alternating short and long inputs",
+        "description": "Complex multi-selection repeated",
         "rounds": [
-            {
-                "pinyin": "ni",
-                "expected": "你",
-                "selections": [{"offset": 0, "choice_index": 0}]
-            },
-            {
-                "pinyin": "womenyaojianchixuexi",
-                "expected": "我们要坚持学习",
-                "selections": [{"offset": 0, "choice_index": 0}]
-            },
-            {
-                "pinyin": "hao",
-                "expected": "好",
-                "selections": [{"offset": 0, "choice_index": 0}]
-            }
+            {"prefix": "我认为", "pinyin": "zhongguorenmin", "expected": "中国人民"},
+            {"prefix": "我认为", "pinyin": "zhongguorenmin", "expected": "中国人民"},
+            {"prefix": "我认为", "pinyin": "zhongguorenmin", "expected": "中国人民"}
         ]
     },
     {
-        "description": "Repeated phrase learning",
+        "description": "今天天气 variations",
         "rounds": [
-            {
-                "pinyin": "heanhong",
-                "expected": "何岸泓",
-                "selections": [{"offset": 0, "choice_index": 0}]
-            },
-            {
-                "pinyin": "heanhong",
-                "expected": "何岸泓",
-                "selections": [{"offset": 0, "choice_index": 0}]
-            },
-            {
-                "pinyin": "heanhong",
-                "expected": "何岸泓",
-                "selections": [{"offset": 0, "choice_index": 0}]
-            }
+            {"prefix": "今天", "pinyin": "tianqi", "expected": "天气"},
+            {"prefix": "今天", "pinyin": "tianqihenhao", "expected": "天气很好"},
+            {"prefix": "今天", "pinyin": "tianqi", "expected": "天气"}
         ]
     }
 ]
 
-if __name__ == "__main__":
-    output_file = "multi_round_tests.json"
-    with open(output_file, 'w', encoding='utf-8') as f:
-        json.dump(test_cases, f, ensure_ascii=False, indent=2)
-    print(f"Generated {len(test_cases)} multi-round test cases")
-    print(f"Saved to {output_file}")
+# Save to JSON
+with open('multi_round_tests.json', 'w', encoding='utf-8') as f:
+    json.dump(test_cases, f, ensure_ascii=False, indent=2)
+
+print(f"Generated {len(test_cases)} multi-round test cases")

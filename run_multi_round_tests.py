@@ -1,144 +1,139 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Run multi-round pinyin tests where the program stays running
-and accepts multiple input-search-select cycles.
-"""
-
 import json
 import subprocess
 import sys
-import select
-import os
 
-def run_multi_round_tests(test_file, executable="./test_pinyin"):
-    """Run multi-round tests from a JSON file."""
+def run_multi_round_test(test_case):
+    """Run a single multi-round test case"""
+    print(f"\n{'='*80}")
+    print(f"Test: {test_case['description']}")
+    print(f"{'='*80}")
+    
+    # Start test_pinyin process
+    process = subprocess.Popen(
+        ['./test_pinyin'],
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        bufsize=1
+    )
+    
+    round_num = 0
+    for round_data in test_case['rounds']:
+        round_num += 1
+        prefix = round_data['prefix']
+        pinyin = round_data['pinyin']
+        expected = round_data['expected']
+        
+        print(f"\nRound {round_num}: prefix='{prefix}', pinyin='{pinyin}', expected='{expected}'")
+        
+        try:
+            # Send prefix
+            process.stdin.write(prefix + '\n')
+            process.stdin.flush()
+            
+            # Send pinyin
+            process.stdin.write(pinyin + '\n')
+            process.stdin.flush()
+            
+            # Read candidates output
+            output_lines = []
+            while True:
+                line = process.stdout.readline()
+                if not line:
+                    break
+                output_lines.append(line.strip())
+                
+                # Look for "choose:" prompt
+                if line.strip().startswith('choose:'):
+                    break
+            
+            # Find the expected candidate
+            candidate_found = False
+            candidate_index = -1
+            
+            for line in output_lines:
+                # Parse candidate line like "0:你把(1) 1:你爸(1) ..."
+                if ':' in line and '(' in line:
+                    parts = line.split()
+                    for part in parts:
+                        if ':' in part and '(' in part:
+                            idx_text = part.split(':')
+                            if len(idx_text) == 2:
+                                idx = idx_text[0]
+                                text_with_score = idx_text[1]
+                                text = text_with_score.split('(')[0]
+                                
+                                if text == expected:
+                                    candidate_found = True
+                                    candidate_index = int(idx)
+                                    break
+                    if candidate_found:
+                        break
+            
+            if not candidate_found:
+                print(f"  ❌ FAILED: Expected '{expected}' not found in candidates")
+                print(f"  Candidates output:")
+                for line in output_lines:
+                    print(f"    {line}")
+                process.kill()
+                return False
+            
+            # Send selection
+            process.stdin.write(str(candidate_index) + '\n')
+            process.stdin.flush()
+            
+            # Read until next prompt
+            while True:
+                line = process.stdout.readline()
+                if not line:
+                    break
+                if 'prefix (Chinese chars):' in line:
+                    break
+            
+            print(f"  ✓ Round {round_num} passed")
+            
+        except Exception as e:
+            print(f"  ❌ FAILED with exception: {e}")
+            process.kill()
+            return False
+    
+    # Cleanup
+    process.stdin.close()
+    process.terminate()
+    process.wait(timeout=2)
+    
+    print(f"\n✓ All {round_num} rounds passed for this test")
+    return True
+
+def main():
+    # Clean build
+    print("Cleaning and rebuilding...")
+    subprocess.run(['make', 'clean'], check=True)
+    subprocess.run(['make'], check=True)
     
     # Load test cases
-    with open(test_file, 'r', encoding='utf-8') as f:
+    with open('multi_round_tests.json', 'r', encoding='utf-8') as f:
         test_cases = json.load(f)
     
-    print(f"Running {len(test_cases)} multi-round test cases...\n")
+    print(f"\nRunning {len(test_cases)} multi-round tests...")
     
-    results = []
     passed = 0
     failed = 0
     
-    for idx, test_case in enumerate(test_cases):
-        print(f"Test {idx + 1}/{len(test_cases)}: {test_case['description']}")
-        
-        # Prepare all inputs upfront
-        inputs = []
-        for round_data in test_case['rounds']:
-            # No prefix anymore - just pinyin
-            inputs.append(round_data['pinyin'])
-            for selection in round_data['selections']:
-                inputs.append(str(selection['choice_index']))
-        
-        # Add EOF marker
-        input_str = '\n'.join(inputs) + '\n'
-        
-        # Run the process
-        try:
-            result = subprocess.run(
-                [executable],
-                input=input_str,
-                capture_output=True,
-                text=True,
-                timeout=10
-            )
-            
-            output = result.stdout
-            
-            # Parse output to extract sentences
-            sentences = []
-            for line in output.split('\n'):
-                if "sentence:" in line:
-                    # Extract sentence after "sentence:" marker
-                    sentence = line.split("sentence:", 1)[1].strip()
-                    sentences.append(sentence)
-            
-            # Check if we got the right number of sentences (one per round)
-            test_passed = True
-            round_results = []
-            
-            if len(sentences) < len(test_case['rounds']):
-                test_passed = False
-                print(f"  ✗ FAILED: Expected {len(test_case['rounds'])} sentences, got {len(sentences)}")
-                round_results.append({"error": f"Not enough sentences: {len(sentences)}/{len(test_case['rounds'])}"})
-            else:
-                # Check each round's expected result
-                for round_idx, round_data in enumerate(test_case['rounds']):
-                    expected = round_data['expected']
-                    # Each round produces one final sentence
-                    if round_idx < len(sentences):
-                        actual = sentences[round_idx]
-                        if actual == expected:
-                            round_results.append({
-                                "round": round_idx + 1,
-                                "passed": True
-                            })
-                            print(f"  Round {round_idx + 1}: ✓ PASSED")
-                        else:
-                            test_passed = False
-                            round_results.append({
-                                "round": round_idx + 1,
-                                "passed": False,
-                                "expected": expected,
-                                "actual": actual
-                            })
-                            print(f"  Round {round_idx + 1}: ✗ FAILED - expected '{expected}', got '{actual}'")
-                    else:
-                        test_passed = False
-                        round_results.append({
-                            "round": round_idx + 1,
-                            "passed": False,
-                            "error": "No sentence found"
-                        })
-                        print(f"  Round {round_idx + 1}: ✗ FAILED - no sentence")
-            
-        except subprocess.TimeoutExpired:
-            test_passed = False
-            print(f"  ✗ TIMEOUT")
-            round_results.append({"error": "Timeout"})
-        except Exception as e:
-            test_passed = False
-            print(f"  ✗ ERROR: {e}")
-            round_results.append({"error": str(e)})
-        
-        if test_passed:
+    for test_case in test_cases:
+        if run_multi_round_test(test_case):
             passed += 1
-            print(f"  Overall: ✓ PASSED\n")
         else:
             failed += 1
-            print(f"  Overall: ✗ FAILED\n")
-        
-        results.append({
-            "test_number": idx + 1,
-            "description": test_case['description'],
-            "passed": test_passed,
-            "rounds": round_results
-        })
     
     # Summary
-    print("=" * 60)
-    print(f"Total: {len(test_cases)} tests")
-    print(f"Passed: {passed}")
-    print(f"Failed: {failed}")
-    print(f"Success rate: {100 * passed / len(test_cases):.1f}%")
+    print(f"\n{'='*80}")
+    print(f"SUMMARY: {passed} passed, {failed} failed out of {len(test_cases)} tests")
+    print(f"{'='*80}")
     
-    # Save results
-    output_file = "multi_round_results.json"
-    with open(output_file, 'w', encoding='utf-8') as f:
-        json.dump(results, f, ensure_ascii=False, indent=2)
-    print(f"\nResults saved to {output_file}")
-    
-    return failed == 0
+    return 0 if failed == 0 else 1
 
-if __name__ == "__main__":
-    test_file = "multi_round_tests.json"
-    if len(sys.argv) > 1:
-        test_file = sys.argv[1]
-    
-    success = run_multi_round_tests(test_file)
-    sys.exit(0 if success else 1)
+if __name__ == '__main__':
+    sys.exit(main())

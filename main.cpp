@@ -95,8 +95,10 @@ void add_to_user_dictionary(pinyin_context_t* context, const std::string& phrase
     fprintf(stdout, "Added phrase '%s' (pinyin: %s): %s\n", phrase.c_str(), pinyin_input.c_str(), added ? "success" : "failed");
 }
 
-bool select_candidate(pinyin_instance_t* instance, int chosen, size_t* start_pos, std::string& generated_sentence)
+bool select_candidate(pinyin_instance_t* instance, int chosen, size_t* start_pos, std::string& generated_sentence, bool* trained)
 {
+    *trained = false;
+
     guint num = 0;
     pinyin_get_n_candidate(instance, &num);
     if(chosen < 0 || static_cast<guint>(chosen) >= num){
@@ -125,6 +127,7 @@ bool select_candidate(pinyin_instance_t* instance, int chosen, size_t* start_pos
         // Train if not the top choice (ibus-libpinyin pattern)
         if(index != 0){
             pinyin_train(instance, index);
+            *trained = true;
         }
 
         // Get the full generated_sentence using the nbest index
@@ -165,9 +168,9 @@ std::pair<std::string, bool> process_pinyin_input(pinyin_instance_t* instance, c
     bool skip_train = false;
     std::string generated_sentence;
 
-    // if(!prefix_input.empty()){
-    //     pinyin_guess_sentence_with_prefix(instance, prefix_input.c_str());
-    // }
+    if(!prefix_input.empty()){
+        pinyin_guess_sentence_with_prefix(instance, prefix_input.c_str());
+    }
 
     for(size_t start = 0; start < pinyin_input.size();){
         pinyin_guess_candidates(instance, start, SORT_BY_PHRASE_LENGTH_AND_PINYIN_LENGTH_AND_FREQUENCY);
@@ -197,8 +200,14 @@ std::pair<std::string, bool> process_pinyin_input(pinyin_instance_t* instance, c
             }
         }
 
-        if(!select_candidate(instance, chosen, &start, generated_sentence)){
+        bool trained_in_select = false;
+        if(!select_candidate(instance, chosen, &start, generated_sentence, &trained_in_select)){
             continue;
+        }
+
+        // If training already happened in select_candidate, skip train_and_save
+        if(trained_in_select){
+            skip_train = true;
         }
     }
 

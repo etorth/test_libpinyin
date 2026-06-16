@@ -7,6 +7,8 @@ vcpkg_download_distfile(ARCHIVE
 vcpkg_extract_source_archive(SOURCE_PATH
     ARCHIVE "${ARCHIVE}"
     SOURCE_BASE "${VERSION}"
+    PATCHES
+        mingw-ucrt64-fixes.patch
 )
 
 vcpkg_configure_make(

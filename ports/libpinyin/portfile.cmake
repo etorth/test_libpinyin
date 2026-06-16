@@ -19,34 +19,16 @@ vcpkg_extract_source_archive(MODEL_SOURCE_PATH
 )
 file(COPY "${MODEL_SOURCE_PATH}/" DESTINATION "${SOURCE_PATH}/data")
 
-set(KYOTOCABINET_PRIVATE_LIBS)
-if(VCPKG_TARGET_IS_LINUX)
-    list(APPEND KYOTOCABINET_PRIVATE_LIBS -lstdc++ -lrt -lpthread -lm -lc)
-elseif(VCPKG_TARGET_IS_OSX)
-    list(APPEND KYOTOCABINET_PRIVATE_LIBS -lc++ -lpthread -lm)
-endif()
-string(JOIN " " KYOTOCABINET_CONFIGURE_LIBS ${KYOTOCABINET_PRIVATE_LIBS})
-
 vcpkg_configure_make(
     SOURCE_PATH "${SOURCE_PATH}"
     AUTOCONFIG
     OPTIONS
-        --with-dbm=KyotoCabinet
+        --with-dbm=BerkeleyDB
         --disable-libzhuyin
         --disable-dependency-tracking
-        "LIBS=${KYOTOCABINET_CONFIGURE_LIBS}"
 )
 
 vcpkg_install_make()
-
-foreach(pc_file IN ITEMS
-    "${CURRENT_PACKAGES_DIR}/lib/pkgconfig/libpinyin.pc"
-    "${CURRENT_PACKAGES_DIR}/debug/lib/pkgconfig/libpinyin.pc"
-)
-    if(EXISTS "${pc_file}")
-        vcpkg_replace_string("${pc_file}" "Requires: glib-2.0" "Requires: glib-2.0\nRequires.private: kyotocabinet")
-    endif()
-endforeach()
 
 vcpkg_fixup_pkgconfig()
 

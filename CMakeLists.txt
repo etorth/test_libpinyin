@@ -24,28 +24,21 @@ find_package(PkgConfig REQUIRED)
 set(PKG_CONFIG_USE_CMAKE_PREFIX_PATH ON)
 set(PKG_CONFIG_ARGN "--static")
 pkg_check_modules(GLIB2 REQUIRED IMPORTED_TARGET glib-2.0)
-pkg_check_modules(KYOTOCABINET REQUIRED kyotocabinet)
 set(PKG_CONFIG_ARGN "")
 pkg_check_modules(LIBPINYIN REQUIRED libpinyin)
 
 pkg_get_variable(LIBPINYIN_DATABASE_FORMAT libpinyin database_format)
-if(NOT LIBPINYIN_DATABASE_FORMAT STREQUAL "KyotoCabinet")
-  message(FATAL_ERROR "vcpkg libpinyin must be configured with --with-dbm=KyotoCabinet; got '${LIBPINYIN_DATABASE_FORMAT}'.")
+if(NOT LIBPINYIN_DATABASE_FORMAT STREQUAL "BerkeleyDB")
+  message(FATAL_ERROR "vcpkg libpinyin must be configured with --with-dbm=BerkeleyDB; got '${LIBPINYIN_DATABASE_FORMAT}'.")
 endif()
 
 pkg_get_variable(LIBPINYIN_PREFIX libpinyin prefix)
-pkg_get_variable(KYOTOCABINET_PREFIX kyotocabinet prefix)
 set(_vcpkg_prefix "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}")
 get_filename_component(_vcpkg_prefix_real "${_vcpkg_prefix}" REALPATH)
 get_filename_component(_libpinyin_prefix_real "${LIBPINYIN_PREFIX}" REALPATH)
-get_filename_component(_kyotocabinet_prefix_real "${KYOTOCABINET_PREFIX}" REALPATH)
 string(FIND "${_libpinyin_prefix_real}" "${_vcpkg_prefix_real}" _vcpkg_prefix_pos)
 if(NOT _vcpkg_prefix_pos EQUAL 0)
   message(FATAL_ERROR "Refusing system libpinyin from '${LIBPINYIN_PREFIX}'. Expected vcpkg prefix '${_vcpkg_prefix}'.")
-endif()
-string(FIND "${_kyotocabinet_prefix_real}" "${_vcpkg_prefix_real}" _vcpkg_prefix_pos)
-if(NOT _vcpkg_prefix_pos EQUAL 0)
-  message(FATAL_ERROR "Refusing system Kyoto Cabinet from '${KYOTOCABINET_PREFIX}'. Expected vcpkg prefix '${_vcpkg_prefix}'.")
 endif()
 
 pkg_get_variable(LIBPINYIN_INCLUDE_DIR libpinyin libpinyinincludedir)
@@ -60,8 +53,8 @@ find_file(LIBPINYIN_STATIC_LIBRARY
   REQUIRED
 )
 
-find_file(KYOTOCABINET_STATIC_LIBRARY
-  NAMES libkyotocabinet.a
+find_file(LIBDB_STATIC_LIBRARY
+  NAMES libdb.a
   PATHS "${_vcpkg_prefix}/lib"
   NO_DEFAULT_PATH
   REQUIRED
@@ -77,7 +70,7 @@ add_library(vcpkg_libpinyin_static INTERFACE)
 target_include_directories(vcpkg_libpinyin_static INTERFACE "${LIBPINYIN_INCLUDE_DIR}")
 target_link_libraries(vcpkg_libpinyin_static INTERFACE
   "${LIBPINYIN_STATIC_LIBRARY}"
-  "${KYOTOCABINET_STATIC_LIBRARY}"
+  "${LIBDB_STATIC_LIBRARY}"
   PkgConfig::GLIB2
 )
 

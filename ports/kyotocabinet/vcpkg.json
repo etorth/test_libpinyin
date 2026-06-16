@@ -1,7 +1,0 @@
-{
-  "name": "kyotocabinet",
-  "version": "1.2.80",
-  "description": "A straightforward implementation of DBM.",
-  "homepage": "https://dbmx.net/kyotocabinet/",
-  "license": "GPL-3.0-or-later"
-}

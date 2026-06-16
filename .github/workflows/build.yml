@@ -42,7 +42,7 @@ jobs:
             echo "== $exe =="
             ldd "$install_dir/$exe"
             readelf -d "$install_dir/$exe" | grep NEEDED
-            if ldd "$install_dir/$exe" | grep -E 'libstdc\+\+|libgcc_s|libpinyin|libkyotocabinet|libglib|libpcre2'; then
+            if ldd "$install_dir/$exe" | grep -E 'libstdc\+\+|libgcc_s|libpinyin|libdb|libglib|libpcre2'; then
               echo "$exe has an unexpected dynamic dependency" >&2
               exit 1
             fi
@@ -97,7 +97,7 @@ jobs:
           for exe in test_pinyin.exe test_extract.exe test_prefix.exe; do
             echo "== $exe =="
             objdump -p "$install_dir/$exe" | grep 'DLL Name' || true
-            if objdump -p "$install_dir/$exe" | grep -Ei 'libstdc\+\+|libgcc_s|libwinpthread|libpinyin|libkyotocabinet|libglib|libpcre2'; then
+            if objdump -p "$install_dir/$exe" | grep -Ei 'libstdc\+\+|libgcc_s|libwinpthread|libpinyin|libdb|libglib|libpcre2'; then
               echo "$exe has an unexpected dynamic dependency" >&2
               exit 1
             fi

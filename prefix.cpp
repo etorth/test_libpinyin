@@ -19,10 +19,9 @@
  */
 
 
-#define _GNU_SOURCE
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <fstream>
+#include <iostream>
+#include <string>
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,11 +30,11 @@
 
 int main(int argc, char * argv[]){
     // Create user.conf if it doesn't exist to avoid warning message
-    if(FILE* check_file = fopen("data/user.conf", "r")){
-        fclose(check_file);
-    }
-    else if(FILE* create_file = fopen("data/user.conf", "w")){
-        fclose(create_file);
+    {
+        std::ifstream check_file("data/user.conf");
+        if(!check_file){
+            std::ofstream create_file("data/user.conf");
+        }
     }
 
     pinyin_context_t * context =
@@ -48,36 +47,25 @@ int main(int argc, char * argv[]){
 
     pinyin_instance_t * instance = pinyin_alloc_instance(context);
 
-    char * prefixbuf = NULL; size_t prefixsize = 0;
-    char * linebuf = NULL; size_t linesize = 0;
-    ssize_t read;
+    std::string prefix_input;
+    std::string line_input;
 
     while( TRUE ){
-        fprintf(stdout, "prefix:");
-        fflush(stdout);
+        std::cout << "prefix:" << std::flush;
 
-        if ((read = getline(&prefixbuf, &prefixsize, stdin)) == -1)
+        if (!std::getline(std::cin, prefix_input))
             break;
 
-        if ( '\n' == prefixbuf[strlen(prefixbuf) - 1] ) {
-            prefixbuf[strlen(prefixbuf) - 1] = '\0';
-        }
+        std::cout << "pinyin:" << std::flush;
 
-        fprintf(stdout, "pinyin:");
-        fflush(stdout);
-
-        if ((read = getline(&linebuf, &linesize, stdin)) == -1)
+        if (!std::getline(std::cin, line_input))
             break;
 
-        if ( '\n' == linebuf[strlen(linebuf) - 1] ) {
-            linebuf[strlen(linebuf) - 1] = '\0';
-        }
-
-        if ( strcmp ( linebuf, "quit" ) == 0)
+        if ( line_input == "quit" )
             break;
 
-        size_t len = pinyin_parse_more_full_pinyins(instance, linebuf);
-        pinyin_guess_sentence_with_prefix(instance, prefixbuf);
+        size_t len = pinyin_parse_more_full_pinyins(instance, line_input.c_str());
+        pinyin_guess_sentence_with_prefix(instance, prefix_input.c_str());
         guint sort_option = SORT_BY_PHRASE_LENGTH | SORT_BY_FREQUENCY;
         pinyin_guess_candidates(instance, 0, sort_option);
 
@@ -85,7 +73,7 @@ int main(int argc, char * argv[]){
         for (i = 0; i <= len; ++i) {
             gchar * aux_text = NULL;
             pinyin_get_full_pinyin_auxiliary_text(instance, i, &aux_text);
-            printf("auxiliary text:%s\n", aux_text);
+            std::cout << "auxiliary text:" << aux_text << '\n';
             g_free(aux_text);
         }
 
@@ -98,9 +86,9 @@ int main(int argc, char * argv[]){
             const char * word = NULL;
             pinyin_get_candidate_string(instance, candidate, &word);
 
-            printf("%s\t", word);
+            std::cout << word << '\t';
         }
-        printf("\n");
+        std::cout << '\n';
 
         pinyin_train(instance, 0);
         pinyin_reset(instance);
@@ -113,6 +101,5 @@ int main(int argc, char * argv[]){
     pinyin_save(context);
     pinyin_fini(context);
 
-    free(prefixbuf); free(linebuf);
     return 0;
 }

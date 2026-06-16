@@ -18,11 +18,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define _GNU_SOURCE
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <algorithm>
+#include <fstream>
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -38,22 +36,9 @@ const bool REMEMBER_EVERY_INPUT = true;  // Match ibus-libpinyin behavior
 
 bool read_stdin(const char* prompt, std::string &input)
 {
-    fprintf(stdout, "%s", prompt);
-    fflush(stdout);
-
-    char *buffer = nullptr;
-    size_t bufsize = 0;
-
-    ssize_t read = getline(&buffer, &bufsize, stdin);
-    if(read == -1){
+    std::cout << prompt << std::flush;
+    if(!std::getline(std::cin, input)){
         return false;
-    }
-
-    input = buffer;
-    free(buffer);
-
-    while(!input.empty() && input.back() == '\n'){
-        input.pop_back();
     }
     return true;
 }
@@ -73,9 +58,9 @@ void display_candidates(pinyin_instance_t* instance, size_t max)
         lookup_candidate_type_t type;
         pinyin_get_candidate_type(instance, candidate, &type);
 
-        printf("%zu:%s(%d)\t", i, word, static_cast<int>(type));
+        std::cout << i << ':' << word << '(' << static_cast<int>(type) << ")\t";
     }
-    printf("\n");
+    std::cout << '\n';
 }
 
 void add_to_user_dictionary(pinyin_context_t* context, const std::string& phrase, const std::string& pinyin_input)
@@ -87,7 +72,9 @@ void add_to_user_dictionary(pinyin_context_t* context, const std::string& phrase
     // Check phrase length against libpinyin's limit (MAX_PHRASE_LENGTH from novel_types.h)
     glong phrase_length = g_utf8_strlen(phrase.c_str(), -1);
     if(phrase_length >= MAX_PHRASE_LENGTH){
-        fprintf(stdout, "Phrase '%s' too long (%ld chars, max %d). Not added to dictionary.\n", phrase.c_str(), phrase_length, MAX_PHRASE_LENGTH - 1);
+        std::cout << "Phrase '" << phrase << "' too long (" << phrase_length
+                  << " chars, max " << MAX_PHRASE_LENGTH - 1
+                  << "). Not added to dictionary.\n";
         return;
     }
 
@@ -95,7 +82,8 @@ void add_to_user_dictionary(pinyin_context_t* context, const std::string& phrase
     bool added = pinyin_iterator_add_phrase(iter, phrase.c_str(), pinyin_input.c_str(), USER_PHRASE_FREQUENCY);
     pinyin_end_add_phrases(iter);
 
-    fprintf(stdout, "Added phrase '%s' (pinyin: %s): %s\n", phrase.c_str(), pinyin_input.c_str(), added ? "success" : "failed");
+    std::cout << "Added phrase '" << phrase << "' (pinyin: " << pinyin_input
+              << "): " << (added ? "success" : "failed") << '\n';
 }
 
 bool select_candidate(pinyin_instance_t* instance, int chosen, size_t* start_pos, std::string& generated_sentence, bool* trained)
@@ -105,7 +93,8 @@ bool select_candidate(pinyin_instance_t* instance, int chosen, size_t* start_pos
     guint num = 0;
     pinyin_get_n_candidate(instance, &num);
     if(chosen < 0 || static_cast<guint>(chosen) >= num){
-        fprintf(stderr, "Error: Invalid candidate index %d (valid: 0-%u)\n", chosen, num - 1);
+        std::cerr << "Error: Invalid candidate index " << chosen
+                  << " (valid: 0-" << num - 1 << ")\n";
         return false;
     }
 
@@ -160,8 +149,7 @@ bool select_candidate(pinyin_instance_t* instance, int chosen, size_t* start_pos
         pinyin_guess_sentence(instance);
     }
 
-    fprintf(stdout, "generated_sentence:%s\n", generated_sentence.c_str());
-    fflush(stdout);
+    std::cout << "generated_sentence:" << generated_sentence << '\n' << std::flush;
 
     return true;
 }
@@ -259,12 +247,13 @@ void train_and_save(pinyin_context_t* context, pinyin_instance_t* instance,
         add_to_user_dictionary(context, generated_sentence, pinyin_input);
     }
     else {
-        fprintf(stdout, "Skipped adding phrase '%s' - incomplete pinyin input\n", generated_sentence.c_str());
+        std::cout << "Skipped adding phrase '" << generated_sentence
+                  << "' - incomplete pinyin input\n";
     }
 
     // Log what we're learning
     if(!prefix_input.empty()){
-        fprintf(stdout, "Learning: '%s' → '%s'\n", prefix_input.c_str(), generated_sentence.c_str());
+        std::cout << "Learning: '" << prefix_input << "' → '" << generated_sentence << "'\n";
     }
 
     // Save to persistent storage
@@ -273,16 +262,16 @@ void train_and_save(pinyin_context_t* context, pinyin_instance_t* instance,
 
 int main(int argc, char* argv[])
 {
-    if(FILE* check_file = fopen("data/user.conf", "r")){
-        fclose(check_file);
-    }
-    else if(FILE* create_file = fopen("data/user.conf", "w")){
-        fclose(create_file);
+    {
+        std::ifstream check_file("data/user.conf");
+        if(!check_file){
+            std::ofstream create_file("data/user.conf");
+        }
     }
 
     pinyin_context_t* context = pinyin_init("data", "data");
     if(!context){
-        fprintf(stderr, "Error: Failed to initialize pinyin context\n");
+        std::cerr << "Error: Failed to initialize pinyin context\n";
         return 1;
     }
 
@@ -291,7 +280,7 @@ int main(int argc, char* argv[])
 
     pinyin_instance_t* instance = pinyin_alloc_instance(context);
     if(!instance){
-        fprintf(stderr, "Error: Failed to allocate pinyin instance\n");
+        std::cerr << "Error: Failed to allocate pinyin instance\n";
         pinyin_fini(context);
         return 1;
     }

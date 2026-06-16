@@ -6,16 +6,16 @@
  */
 
 #include "pinyin.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstring>
+#include <fstream>
+#include <iostream>
 #include <string>
 #include <vector>
 
 // Extract last N phrases from text using libpinyin's phrase segmentation
 std::string get_last_phrases(pinyin_context_t* context, pinyin_instance_t* instance,
                              const char* text, int num_phrases = 2) {
-    if (!text || strlen(text) == 0) {
+    if (!text || std::strlen(text) == 0) {
         return "";
     }
 
@@ -56,7 +56,7 @@ std::string get_last_phrases(pinyin_context_t* context, pinyin_instance_t* insta
 
     // Use libpinyin to segment the cleaned text into phrases
     if (!pinyin_phrase_segment(instance, clean_text.c_str())) {
-        fprintf(stderr, "Failed to segment phrase\n");
+        std::cerr << "Failed to segment phrase\n";
         return "";
     }
 
@@ -68,7 +68,7 @@ std::string get_last_phrases(pinyin_context_t* context, pinyin_instance_t* insta
         return "";
     }
 
-    printf("Total phrases found: %u\n", num);
+    std::cout << "Total phrases found: " << num << '\n';
 
     // Calculate starting index for last N phrases
     guint start_idx = (num > (guint)num_phrases) ? (num - num_phrases) : 0;
@@ -90,7 +90,8 @@ std::string get_last_phrases(pinyin_context_t* context, pinyin_instance_t* insta
 
         if (pinyin_token_get_phrase(instance, tokens[i], &len, &phrase_str)) {
             if (phrase_str) {
-                printf("Phrase %zu: %s (length: %u)\n", i, phrase_str, len);
+                std::cout << "Phrase " << i << ": " << phrase_str
+                          << " (length: " << len << ")\n";
                 result += phrase_str;
                 g_free(phrase_str);
             }
@@ -103,48 +104,44 @@ std::string get_last_phrases(pinyin_context_t* context, pinyin_instance_t* insta
 int main(int argc, char* argv[]) {
 
     if (argc < 2) {
-        fprintf(stderr, "Usage: %s \"Chinese text\"\n", argv[0]);
-        fprintf(stderr, "Example: %s \"不管其他啥事，如果只讨论今晚吃啥，我吃\"\n", argv[0]);
+        std::cerr << "Usage: " << argv[0] << " \"Chinese text\"\n";
+        std::cerr << "Example: " << argv[0] << " \"不管其他啥事，如果只讨论今晚吃啥，我吃\"\n";
         return 1;
     }
 
     // Create user.conf if it doesn't exist to avoid warning message
-    FILE* check_file = fopen("data/user.conf", "r");
-    if (!check_file) {
-        FILE* create_file = fopen("data/user.conf", "w");
-        if (create_file) {
-            fclose(create_file);
+    {
+        std::ifstream check_file("data/user.conf");
+        if (!check_file) {
+            std::ofstream create_file("data/user.conf");
         }
-    }
-    else {
-        fclose(check_file);
     }
 
     const char* text = argv[1];
 
-    printf("Input text: %s\n", text);
-    printf("=================================\n\n");
+    std::cout << "Input text: " << text << '\n';
+    std::cout << "=================================\n\n";
 
     pinyin_context_t* context = pinyin_init("data", "data");
     if (!context) {
-        fprintf(stderr, "Failed to initialize pinyin context\n");
+        std::cerr << "Failed to initialize pinyin context\n";
         return 1;
     }
 
     pinyin_instance_t* instance = pinyin_alloc_instance(context);
     if (!instance) {
-        fprintf(stderr, "Failed to allocate instance\n");
+        std::cerr << "Failed to allocate instance\n";
         pinyin_fini(context);
         return 1;
     }
 
     std::string last_1_phrase = get_last_phrases(context, instance, text, 1);
-    printf("Last 1 phrase: %s\n\n", last_1_phrase.c_str());
+    std::cout << "Last 1 phrase: " << last_1_phrase << "\n\n";
 
     pinyin_reset(instance);
 
     std::string last_2_phrases = get_last_phrases(context, instance, text, 2);
-    printf("Last 2 phrases: %s\n\n", last_2_phrases.c_str());
+    std::cout << "Last 2 phrases: " << last_2_phrases << "\n\n";
 
     // Cleanup
     pinyin_free_instance(instance);

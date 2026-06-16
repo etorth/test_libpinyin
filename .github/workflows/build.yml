@@ -1,0 +1,113 @@
+name: Build
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  native-linux:
+    name: Native Linux
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install build tools
+        run: |
+          sudo apt update
+          sudo apt install -y \
+            autoconf \
+            automake \
+            build-essential \
+            gawk \
+            libtool \
+            ninja-build \
+            pkg-config
+
+      - name: Build
+        run: ./build.py --build-dir "$RUNNER_TEMP/test_libpinyin"
+
+      - name: Verify Linux linkage
+        run: |
+          set -euo pipefail
+          install_dir="$RUNNER_TEMP/test_libpinyin/install"
+          for exe in test_pinyin test_extract test_prefix; do
+            echo "== $exe =="
+            ldd "$install_dir/$exe"
+            readelf -d "$install_dir/$exe" | grep NEEDED
+            if ldd "$install_dir/$exe" | grep -E 'libstdc\+\+|libgcc_s|libpinyin|libkyotocabinet|libglib|libpcre2'; then
+              echo "$exe has an unexpected dynamic dependency" >&2
+              exit 1
+            fi
+          done
+
+      - name: Smoke test
+        run: |
+          set -euo pipefail
+          install_dir="$RUNNER_TEMP/test_libpinyin/install"
+          cd "$install_dir"
+          printf '\nnihao\n0\nquit\n' | ./test_pinyin
+          ./test_extract "不管其他啥事，如果只讨论今晚吃啥，我吃"
+          printf '\nnihao\n\nquit\n' | ./test_prefix
+
+  mingw-ucrt64:
+    name: MinGW UCRT64
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up MSYS2 UCRT64
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          update: true
+          install: >-
+            base-devel
+            git
+            mingw-w64-ucrt-x86_64-cmake
+            mingw-w64-ucrt-x86_64-gcc
+            mingw-w64-ucrt-x86_64-ninja
+            mingw-w64-ucrt-x86_64-pkgconf
+            mingw-w64-ucrt-x86_64-python
+
+      - name: Build
+        env:
+          VCPKG_DEFAULT_TRIPLET: x64-mingw-static
+          VCPKG_DEFAULT_HOST_TRIPLET: x64-mingw-static
+        run: |
+          set -euo pipefail
+          ./build.py --build-dir "$PWD/../b_test_libpinyin"
+
+      - name: Verify MinGW linkage
+        run: |
+          set -euo pipefail
+          install_dir="$PWD/../b_test_libpinyin/install"
+          for exe in test_pinyin.exe test_extract.exe test_prefix.exe; do
+            echo "== $exe =="
+            objdump -p "$install_dir/$exe" | grep 'DLL Name' || true
+            if objdump -p "$install_dir/$exe" | grep -Ei 'libstdc\+\+|libgcc_s|libwinpthread|libpinyin|libkyotocabinet|libglib|libpcre2'; then
+              echo "$exe has an unexpected dynamic dependency" >&2
+              exit 1
+            fi
+          done
+
+      - name: Smoke test
+        run: |
+          set -euo pipefail
+          install_dir="$PWD/../b_test_libpinyin/install"
+          cd "$install_dir"
+          printf '\nnihao\n0\nquit\n' | ./test_pinyin.exe
+          ./test_extract.exe "不管其他啥事，如果只讨论今晚吃啥，我吃"
+          printf '\nnihao\n\nquit\n' | ./test_prefix.exe

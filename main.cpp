@@ -18,17 +18,19 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include "pinyin.h"
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <algorithm>
 #include <string>
 #include <vector>
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "pinyin.h"
 
 const int USER_DICTIONARY_INDEX = 7;
 const int USER_PHRASE_FREQUENCY = 100;

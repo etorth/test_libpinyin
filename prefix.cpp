@@ -19,14 +19,15 @@
  */
 
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include "pinyin.h"
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+#include "pinyin.h"
 
 int main(int argc, char * argv[]){
     // Create user.conf if it doesn't exist to avoid warning message

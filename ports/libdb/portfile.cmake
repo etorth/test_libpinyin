@@ -16,6 +16,11 @@ file(CHMOD
         WORLD_READ WORLD_EXECUTE
 )
 
+set(LIBDB_CFLAGS "\${CFLAGS} -Wno-incompatible-pointer-types")
+set(LIBDB_CXXFLAGS "\${CXXFLAGS}")
+set(LIBDB_LDFLAGS "\${LDFLAGS}")
+set(LIBDB_BUILD_OPTIONS)
+
 set(configure_options
     --enable-compat185
     --enable-dbm
@@ -26,17 +31,17 @@ set(configure_options
     --disable-sql
     --disable-stl
     --disable-tcl
-    "CFLAGS=\${CFLAGS} -Wno-incompatible-pointer-types"
 )
 
 if(VCPKG_TARGET_IS_MINGW)
+    string(APPEND LIBDB_CFLAGS " -DUNICODE -D_UNICODE")
+    string(APPEND LIBDB_CXXFLAGS " -DUNICODE -D_UNICODE")
+    string(APPEND LIBDB_LDFLAGS " -lpthread")
+    list(APPEND LIBDB_BUILD_OPTIONS LIBSO_LIBS=-lpthread)
     list(APPEND configure_options
         --enable-mingw
         ac_cv_func_time=yes
         ac_cv_func_localtime=yes
-        "CFLAGS=\${CFLAGS} -DUNICODE -D_UNICODE -Wno-incompatible-pointer-types"
-        "CXXFLAGS=\${CXXFLAGS} -DUNICODE -D_UNICODE"
-        "LDFLAGS=\${LDFLAGS} -lpthread"
     )
 endif()
 
@@ -45,9 +50,12 @@ vcpkg_configure_make(
     PROJECT_SUBPATH dist
     OPTIONS
         ${configure_options}
+        "CFLAGS=${LIBDB_CFLAGS}"
+        "CXXFLAGS=${LIBDB_CXXFLAGS}"
+        "LDFLAGS=${LIBDB_LDFLAGS}"
 )
 
-vcpkg_install_make()
+vcpkg_install_make(OPTIONS ${LIBDB_BUILD_OPTIONS})
 
 file(REMOVE_RECURSE
     "${CURRENT_PACKAGES_DIR}/debug/bin"

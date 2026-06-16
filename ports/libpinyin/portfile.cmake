@@ -4,6 +4,8 @@ vcpkg_from_github(
     REF "${VERSION}"
     SHA512 ef9316fc4e429821fa9d9f1edba0c4f9918ac1f69d6cabfbfb60acd330db3078e7b38f3f61ddbdbaafbd7d1eb1d082c0257b871dfe6d81de3c4c72adefe6e431
     HEAD_REF main
+    PATCHES
+        portable-g-fsync.patch
 )
 
 vcpkg_download_distfile(MODEL_ARCHIVE

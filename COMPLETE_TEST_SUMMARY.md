@@ -222,7 +222,7 @@ Typical pinyin IME accuracy:
 ### For Developers
 ```bash
 # After making changes to main.cpp
-make
+./build.py
 python3 run_tests.py
 
 # If all pass, changes are safe
@@ -232,7 +232,7 @@ python3 run_tests.py
 ```yaml
 - name: Test libpinyin
   run: |
-    make
+    ./build.py
     python3 run_tests.py
     python3 run_long_tests.py
 ```

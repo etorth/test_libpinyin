@@ -1,0 +1,10 @@
+build/
+install/
+vcpkg/
+vcpkg_installed/
+
+data/
+test_extract
+test_pinyin
+test_prefix
+*.o

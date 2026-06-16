@@ -181,7 +181,9 @@ main.cpp:
 
 ### Basic Usage
 ```bash
-./a.out
+./build.py
+cd install
+./test_pinyin
 prefix (Chinese chars): 
 pinyin: nihao
 choose: 0
@@ -193,7 +195,7 @@ sentence: 你好
 # Train pattern: "我吃" → "泥巴"
 for i in {1..15}; do
     echo -e "\n\n我吃\nniba\n0\n"
-done | ./a.out
+done | ./install/test_pinyin
 
 # Test: Should eventually prefer "泥巴" after "我吃"
 ```

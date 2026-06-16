@@ -61,7 +61,7 @@ EOF
 
 ### 1. Program Not Found
 ```bash
-make  # Build test_pinyin first
+./build.py  # Build install/test_pinyin first
 ```
 
 ### 2. Timeout Issues
@@ -112,7 +112,7 @@ Typical performance on modern hardware:
 - name: Run libpinyin tests
   run: |
     cd test_libpinyin
-    make
+    ./build.py
     python3 run_tests.py
 ```
 
@@ -135,7 +135,7 @@ for f in failed:
 
 ### Manual test replication
 ```bash
-./test_pinyin
+./install/test_pinyin
 # Type the prefix
 # Type the pinyin
 # Select candidate 0

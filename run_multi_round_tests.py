@@ -1,7 +1,14 @@
 #!/usr/bin/env python3
 import json
+import os
+from pathlib import Path
 import subprocess
 import sys
+
+PROJECT_DIR = Path(__file__).resolve().parent
+
+def default_program_path():
+    return Path(os.environ.get("TEST_PINYIN", PROJECT_DIR / "install" / "test_pinyin")).resolve()
 
 def run_multi_round_test(test_case):
     """Run a single multi-round test case"""
@@ -10,8 +17,10 @@ def run_multi_round_test(test_case):
     print(f"{'='*80}")
     
     # Start test_pinyin process
+    program_path = default_program_path()
     process = subprocess.Popen(
-        ['./test_pinyin'],
+        [str(program_path)],
+        cwd=str(program_path.parent),
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -108,13 +117,11 @@ def run_multi_round_test(test_case):
     return True
 
 def main():
-    # Clean build
-    print("Cleaning and rebuilding...")
-    subprocess.run(['make', 'clean'], check=True)
-    subprocess.run(['make'], check=True)
+    print("Building with vcpkg/CMake...")
+    subprocess.run([sys.executable, str(PROJECT_DIR / 'build.py')], check=True, cwd=str(PROJECT_DIR))
     
     # Load test cases
-    with open('multi_round_tests.json', 'r', encoding='utf-8') as f:
+    with open(PROJECT_DIR / 'multi_round_tests.json', 'r', encoding='utf-8') as f:
         test_cases = json.load(f)
     
     print(f"\nRunning {len(test_cases)} multi-round tests...")

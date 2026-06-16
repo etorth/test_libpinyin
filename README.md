@@ -20,8 +20,9 @@ A Chinese pinyin input method test program using libpinyin, following ibus-libpi
 ## Usage
 
 ```bash
-make
-./a.out
+./build.py
+cd install
+./test_pinyin
 ```
 
 ### Input Flow
@@ -72,7 +73,7 @@ The prefix feature uses **statistical bigram learning** implemented in libpinyin
 1. When you enter prefix "我吃" and select "泥巴" for "niba", the system records this transition
 2. `pinyin_train()` updates the bigram probability model  
 3. `pinyin_remember_user_input()` saves the phrase-pinyin association
-4. Data is saved to `data/user_bigram.db`
+4. Data is saved to `install/data/user_bigram.db`
 
 ### How It Affects Ranking:
 - libpinyin automatically consults the bigram model during `pinyin_guess_candidates()`
@@ -97,5 +98,5 @@ The prefix feature uses **statistical bigram learning** implemented in libpinyin
 ## Files
 
 - `main.cpp`: Main program source
-- `data/`: libpinyin data files (system and user dictionaries)
-- `data/user.bin`, `data/user_bigram.db`: User-learned phrases and bigrams
+- `install/data/`: vcpkg libpinyin data files copied beside the installed test programs
+- `install/data/user.bin`, `install/data/user_bigram.db`: User-learned phrases and bigrams

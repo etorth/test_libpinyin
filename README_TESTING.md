@@ -122,7 +122,7 @@ print(test3['output'])
 
 ### Run single test manually
 ```bash
-./test_pinyin
+./install/test_pinyin
 # Input: (empty prefix)
 # Input: wohengaoxing
 # Select: 0

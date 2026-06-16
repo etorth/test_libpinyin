@@ -248,7 +248,7 @@ python3 generate_multi_selection_tests.py  # Multi-selection
 ### For Development
 ```bash
 # After making changes to main.cpp
-make clean && make
+./build.py
 python3 run_tests.py
 
 # If pass rate drops, investigate
@@ -259,7 +259,7 @@ python3 run_tests.py
 ```yaml
 test:
   script:
-    - make
+    - ./build.py
     - python3 run_tests.py || exit 1
     - python3 run_long_tests.py || exit 1
     - python3 run_multi_selection_tests.py || true  # Allow auto-complete "failures"

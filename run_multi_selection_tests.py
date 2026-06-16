@@ -9,11 +9,19 @@ import subprocess
 import json
 import time
 import sys
+import os
+from pathlib import Path
 from datetime import datetime
 
+PROJECT_DIR = Path(__file__).resolve().parent
+
+def default_program_path():
+    return Path(os.environ.get("TEST_PINYIN", PROJECT_DIR / "install" / "test_pinyin")).resolve()
+
 class MultiSelectionTestRunner:
-    def __init__(self, program_path="./test_pinyin", test_file="multi_selection_tests.json"):
-        self.program_path = program_path
+    def __init__(self, program_path=None, test_file="multi_selection_tests.json"):
+        self.program_path = default_program_path() if program_path is None else Path(program_path).resolve()
+        self.program_cwd = self.program_path.parent
         self.test_file = test_file
         self.results = {
             "passed": 0,
@@ -49,7 +57,8 @@ class MultiSelectionTestRunner:
         try:
             # Run the program with timeout
             process = subprocess.Popen(
-                [self.program_path],
+                [str(self.program_path)],
+                cwd=str(self.program_cwd),
                 stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
@@ -274,10 +283,10 @@ class MultiSelectionTestRunner:
 
 if __name__ == "__main__":
     # Check if program exists
-    import os
-    if not os.path.exists("./test_pinyin"):
-        print("Error: test_pinyin program not found!")
-        print("Please run 'make' first to build the program.")
+    program_path = default_program_path()
+    if not program_path.exists():
+        print(f"Error: {program_path} not found!")
+        print("Please run './build.py' first to build the vcpkg/CMake test programs.")
         sys.exit(1)
     
     # Check if test cases exist
@@ -286,7 +295,7 @@ if __name__ == "__main__":
         subprocess.run(["python3", "generate_multi_selection_tests.py"])
     
     # Run tests
-    runner = MultiSelectionTestRunner()
+    runner = MultiSelectionTestRunner(program_path=program_path)
     results = runner.run_all_tests()
     runner.save_results()
     runner.print_failures()

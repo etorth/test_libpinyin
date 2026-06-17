@@ -1,11 +1,9 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
-    REPO libpinyin/libpinyin
-    REF "${VERSION}"
-    SHA512 ef9316fc4e429821fa9d9f1edba0c4f9918ac1f69d6cabfbfb60acd330db3078e7b38f3f61ddbdbaafbd7d1eb1d082c0257b871dfe6d81de3c4c72adefe6e431
+    REPO etorth/libpinyin
+    REF 1089f205914cdabdc11937cc373e4ed1b8fff0bf
+    SHA512 4426c6ac54dfb02ccaca0c31a2f6e1f4d4c320c401eff0eaaede35cb57aa610c19fb298eec6b1f8e1e2476f8885f4481d6e98d12091d1d5e9a9112a8116d6400
     HEAD_REF main
-    PATCHES
-        portable-g-fsync.patch
 )
 
 vcpkg_download_distfile(MODEL_ARCHIVE

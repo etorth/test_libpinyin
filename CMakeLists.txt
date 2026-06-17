@@ -62,9 +62,17 @@ find_file(LIBDB_STATIC_LIBRARY
 
 pkg_get_variable(LIBPINYIN_PKGDATADIR libpinyin pkgdatadir)
 set(LIBPINYIN_DATA_DIR "${LIBPINYIN_PKGDATADIR}/data")
+get_filename_component(LIBPINYIN_DATA_DIR "${LIBPINYIN_DATA_DIR}" REALPATH)
 if(NOT EXISTS "${LIBPINYIN_DATA_DIR}/table.conf")
   message(FATAL_ERROR "Could not find vcpkg libpinyin data in '${LIBPINYIN_DATA_DIR}'.")
 endif()
+
+add_custom_target(copy_libpinyin_data ALL
+  COMMAND "${CMAKE_COMMAND}" -E copy_directory
+          "${LIBPINYIN_DATA_DIR}"
+          "${CMAKE_CURRENT_BINARY_DIR}/data"
+  VERBATIM
+)
 
 add_library(vcpkg_libpinyin_static INTERFACE)
 target_include_directories(vcpkg_libpinyin_static INTERFACE "${LIBPINYIN_INCLUDE_DIR}")
@@ -84,12 +92,7 @@ function(add_libpinyin_test name source)
     target_link_options("${name}" PRIVATE -static-libgcc -static-libstdc++)
   endif()
 
-  add_custom_command(TARGET "${name}" POST_BUILD
-    COMMAND "${CMAKE_COMMAND}" -E copy_directory
-            "${LIBPINYIN_DATA_DIR}"
-            "$<TARGET_FILE_DIR:${name}>/data"
-    VERBATIM
-  )
+  add_dependencies("${name}" copy_libpinyin_data)
 endfunction()
 
 add_libpinyin_test(test_pinyin main.cpp)

@@ -34,6 +34,7 @@ jobs:
       - name: Build
         env:
           VCPKG_DEFAULT_TRIPLET: x64-linux-release
+          VCPKG_MAX_CONCURRENCY: 4
         run: ./build.py --build-dir "$RUNNER_TEMP/test_libpinyin"
 
       - name: Verify Linux linkage
@@ -88,6 +89,7 @@ jobs:
         env:
           VCPKG_DEFAULT_TRIPLET: x64-mingw-static-release
           VCPKG_DEFAULT_HOST_TRIPLET: x64-mingw-static-release
+          VCPKG_MAX_CONCURRENCY: 4
         run: |
           set -euo pipefail
           ./build.py --build-dir "$PWD/../b_test_libpinyin"

@@ -32,6 +32,8 @@ jobs:
             pkg-config
 
       - name: Build
+        env:
+          VCPKG_DEFAULT_TRIPLET: x64-linux-release
         run: ./build.py --build-dir "$RUNNER_TEMP/test_libpinyin"
 
       - name: Verify Linux linkage
@@ -84,8 +86,8 @@ jobs:
 
       - name: Build
         env:
-          VCPKG_DEFAULT_TRIPLET: x64-mingw-static
-          VCPKG_DEFAULT_HOST_TRIPLET: x64-mingw-static
+          VCPKG_DEFAULT_TRIPLET: x64-mingw-static-release
+          VCPKG_DEFAULT_HOST_TRIPLET: x64-mingw-static-release
         run: |
           set -euo pipefail
           ./build.py --build-dir "$PWD/../b_test_libpinyin"

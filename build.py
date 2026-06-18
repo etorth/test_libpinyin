@@ -10,6 +10,7 @@ from pathlib import Path
 
 SOURCE_DIR = Path(__file__).resolve().parent
 DEFAULT_LOCAL_BUILD_DIR = Path.cwd().resolve()
+TRIPLETS_DIR = SOURCE_DIR / "triplets"
 
 
 def run(args, *, env=None, cwd=None):
@@ -208,6 +209,8 @@ def main():
         f"-DCMAKE_TOOLCHAIN_FILE={vcpkg_toolchain(vcpkg_root)}",
         f"-DVCPKG_TARGET_TRIPLET={vcpkg_triplet}",
     ]
+    if TRIPLETS_DIR.is_dir():
+        cmake_configure_args.append(f"-DVCPKG_OVERLAY_TRIPLETS={TRIPLETS_DIR}")
     if vcpkg_host_triplet:
         cmake_configure_args.append(f"-DVCPKG_HOST_TRIPLET={vcpkg_host_triplet}")
     if args.c_compiler:

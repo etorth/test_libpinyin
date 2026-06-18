@@ -1,5 +1,3 @@
-set(VCPKG_BUILD_TYPE release)
-
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO etorth/libpinyin
@@ -30,10 +28,7 @@ vcpkg_configure_make(
         --disable-dependency-tracking
 )
 
-vcpkg_install_make(
-    BUILD_TARGET "SUBDIRS=src utils data\;MAKEOVERRIDES=\;all-recursive"
-    INSTALL_TARGET "SUBDIRS=src data\;MAKEOVERRIDES=\;install-recursive"
-)
+vcpkg_install_make()
 
 vcpkg_fixup_pkgconfig()
 

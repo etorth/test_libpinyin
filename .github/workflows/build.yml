@@ -84,7 +84,6 @@ jobs:
             mingw-w64-ucrt-x86_64-python
 
       - name: Build
-        timeout-minutes: 90
         env:
           VCPKG_DEFAULT_TRIPLET: x64-mingw-static
           VCPKG_DEFAULT_HOST_TRIPLET: x64-mingw-static

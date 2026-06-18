@@ -33,8 +33,13 @@ jobs:
 
       - name: Build
         env:
+          CMAKE_MESSAGE_LOG_LEVEL: VERBOSE
+          NINJA_STATUS: "[%f/%t %es] "
           VCPKG_DEFAULT_TRIPLET: x64-linux-release
-          VCPKG_MAX_CONCURRENCY: 4
+          VCPKG_KEEP_ENV_VARS: "CMAKE_MESSAGE_LOG_LEVEL;NINJA_STATUS;V;VERBOSE"
+          VCPKG_MAX_CONCURRENCY: "4"
+          V: "1"
+          VERBOSE: "1"
         run: ./build.py --build-dir "$RUNNER_TEMP/test_libpinyin"
 
       - name: Verify Linux linkage
@@ -87,9 +92,14 @@ jobs:
 
       - name: Build
         env:
+          CMAKE_MESSAGE_LOG_LEVEL: VERBOSE
+          NINJA_STATUS: "[%f/%t %es] "
           VCPKG_DEFAULT_TRIPLET: x64-mingw-static-release
           VCPKG_DEFAULT_HOST_TRIPLET: x64-mingw-static-release
-          VCPKG_MAX_CONCURRENCY: 4
+          VCPKG_KEEP_ENV_VARS: "CMAKE_MESSAGE_LOG_LEVEL;NINJA_STATUS;V;VERBOSE"
+          VCPKG_MAX_CONCURRENCY: "4"
+          V: "1"
+          VERBOSE: "1"
         run: |
           set -euo pipefail
           ./build.py --build-dir "$PWD/../b_test_libpinyin"

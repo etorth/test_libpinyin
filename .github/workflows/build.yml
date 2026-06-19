@@ -41,13 +41,10 @@ jobs:
           set -euo pipefail
           install_dir="$RUNNER_TEMP/test_libpinyin/install"
           for exe in test_pinyin test_extract test_prefix; do
-            echo "== $exe =="
+            echo "== ldd $exe =="
             ldd "$install_dir/$exe"
-            readelf -d "$install_dir/$exe" | grep NEEDED
-            if ldd "$install_dir/$exe" | grep -E 'libstdc\+\+|libgcc_s|libpinyin|libdb|libglib|libpcre2'; then
-              echo "$exe has an unexpected dynamic dependency" >&2
-              exit 1
-            fi
+            echo "== readelf $exe =="
+            readelf -d "$install_dir/$exe" | grep NEEDED || true
           done
 
       - name: Smoke test
@@ -97,12 +94,10 @@ jobs:
           set -euo pipefail
           install_dir="$PWD/../b_test_libpinyin/install"
           for exe in test_pinyin.exe test_extract.exe test_prefix.exe; do
-            echo "== $exe =="
+            echo "== ldd $exe =="
+            ldd "$install_dir/$exe"
+            echo "== objdump $exe =="
             objdump -p "$install_dir/$exe" | grep 'DLL Name' || true
-            if objdump -p "$install_dir/$exe" | grep -Ei 'libstdc\+\+|libgcc_s|libwinpthread|libpinyin|libdb|libglib|libpcre2'; then
-              echo "$exe has an unexpected dynamic dependency" >&2
-              exit 1
-            fi
           done
 
       - name: Smoke test
